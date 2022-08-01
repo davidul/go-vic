@@ -31,4 +31,8 @@ func main() {
 	fmt.Println("Print list")
 	list.Print()
 
+	fmt.Println("================")
+	for h := list.Head(); h != nil; h = h.Next() {
+		fmt.Printf("Value -> %d \n", h.Data())
+	}
 }

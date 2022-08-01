@@ -10,17 +10,28 @@ type LinkedList struct {
 
 type Node struct {
 	next *Node
-	data interface{}
+	list *LinkedList
+	data any
 }
 
-/*type LinkedListIterator struct {
-	index int
-	list  *LinkedList
-}*/
+func (n *Node) Next() *Node {
+	if n.next != nil {
+		return n.next
+	}
+	return nil
+}
+
+func (n *Node) Data() any {
+	return n.data
+}
+
+func (L *LinkedList) Head() *Node {
+	return L.head
+}
 
 // a -> b -> c ->
 //
-func (L *LinkedList) Add(data interface{}) {
+func (L *LinkedList) Add(data any) {
 	list := &Node{
 		next: nil,
 		data: data}
@@ -34,11 +45,11 @@ func (L *LinkedList) Add(data interface{}) {
 	L.count++
 }
 
-func (L *LinkedList) AddLast(data interface{}) {
+func (L *LinkedList) AddLast(data any) {
 	L.Add(data)
 }
 
-func (L *LinkedList) AddFirst(data interface{}) {
+func (L *LinkedList) AddFirst(data any) {
 	oldHead := L.head
 	list := &Node{
 		next: oldHead,
@@ -49,7 +60,7 @@ func (L *LinkedList) AddFirst(data interface{}) {
 }
 
 // Peek returns but does not remove the head element
-func (L *LinkedList) Peek() interface{} {
+func (L *LinkedList) Peek() any {
 	if L.head != nil {
 		return L.head.data
 	} else {
@@ -58,7 +69,7 @@ func (L *LinkedList) Peek() interface{} {
 }
 
 // PeekLast returns but does not remove the tail element
-func (L *LinkedList) PeekLast() interface{} {
+func (L *LinkedList) PeekLast() any {
 	if L.tail != nil {
 		return L.tail.data
 	} else {
@@ -68,7 +79,7 @@ func (L *LinkedList) PeekLast() interface{} {
 
 // Remove retrieves and removes the head
 // memory leak or gc will collect it?
-func (L *LinkedList) Remove() interface{} {
+func (L *LinkedList) Remove() any {
 	head := L.head
 	newHead := head.next
 	L.head = newHead
@@ -82,8 +93,8 @@ func (L *LinkedList) Remove() interface{} {
 	}
 }*/
 
-func (L *LinkedList) ToArray() []interface{} {
-	i := make([]interface{}, L.count)
+func (L *LinkedList) ToArray() []any {
+	i := make([]any, L.count)
 	e := L.head
 	c := 0
 	for e != nil {
