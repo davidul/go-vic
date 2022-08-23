@@ -1,6 +1,7 @@
 package main
 
 import (
+	"data-structures-go/graph/intgraph"
 	"data-structures-go/linkedlist"
 	"fmt"
 )
@@ -10,14 +11,17 @@ func main() {
 	list.Add(1)
 	list.Add(2)
 	list.Add(3)
+	list.Add(4)
+	list.Add(5)
+	list.RemoveLast()
 	list.Print()
-	fmt.Println("===============")
+	fmt.Println("=======Peek first/last========")
 	fmt.Println(list.Peek())
 	fmt.Println(list.PeekLast())
-	fmt.Println("===============")
+	fmt.Println("=======AddFirst -4- ========")
 	list.AddFirst(4)
 	list.Print()
-	fmt.Println("===============")
+	fmt.Println("=====AddFirst -5- ==========")
 	list.AddFirst(5)
 	list.Print()
 	array := list.ToArray()
@@ -35,4 +39,12 @@ func main() {
 	for h := list.Head(); h != nil; h = h.Next() {
 		fmt.Printf("Value -> %d \n", h.Data())
 	}
+
+	intGraph := intgraph.NewIntGraph()
+	one := intGraph.Add(1)
+	intGraph.AddEdge(one, 2)
+	bsf := intGraph.Bsf(1, 2)
+	fmt.Printf("Bsf search for 2, found %d \n", bsf)
+	bsf = intGraph.Bsf(1, 3)
+	fmt.Printf("Bsf search for 3, found %d \n", bsf)
 }

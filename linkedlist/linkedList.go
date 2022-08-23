@@ -1,6 +1,8 @@
 package linkedlist
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type LinkedList struct {
 	head  *Node
@@ -10,6 +12,7 @@ type LinkedList struct {
 
 type Node struct {
 	next *Node
+	prev *Node
 	list *LinkedList
 	data any
 }
@@ -29,18 +32,19 @@ func (L *LinkedList) Head() *Node {
 	return L.head
 }
 
-// a -> b -> c ->
-//
+// Add append at the end of the list
 func (L *LinkedList) Add(data any) {
-	list := &Node{
+	node := &Node{
 		next: nil,
+		prev: nil,
 		data: data}
 	if L.head == nil {
-		L.head = list
-		L.tail = list
+		L.head = node
+		L.tail = node
 	} else {
-		L.tail.next = list
-		L.tail = list
+		node.prev = L.tail
+		L.tail.next = node
+		L.tail = L.tail.next
 	}
 	L.count++
 }
@@ -87,11 +91,18 @@ func (L *LinkedList) Remove() any {
 	return head.data
 }
 
-/*func (L *LinkedList) createIterator() iterator {
-	return &LinkedListIterator{
-		list: L,
+func (L *LinkedList) RemoveLast() any {
+	if L.tail != nil {
+		tail := L.tail
+		L.tail = nil
+		return tail.data
 	}
-}*/
+	return nil
+}
+
+func (L *LinkedList) Poll() any {
+	return L.Remove()
+}
 
 func (L *LinkedList) ToArray() []any {
 	i := make([]any, L.count)
@@ -105,6 +116,29 @@ func (L *LinkedList) ToArray() []any {
 	return i
 }
 
+func (L *LinkedList) Contains(v any) bool {
+	for e := L.head; e != nil; e = e.Next() {
+		if e.Data() == v {
+			return true
+		}
+	}
+	return false
+}
+
+func (L *LinkedList) IsEmpty() bool {
+	if L.head == nil {
+		return true
+	}
+	return false
+}
+
+//func (L LinkedList) Reverse() LinkedList {
+//
+//}
+
+func (L *LinkedList) Size() int {
+	return L.count
+}
 func (L *LinkedList) Print() {
 	list := L.head
 	for list != nil {
