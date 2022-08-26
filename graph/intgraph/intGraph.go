@@ -1,7 +1,7 @@
 package intgraph
 
 import (
-	"github.com/davidul/data-structures-go/linkedlist"
+	"github.com/davidul/go-vic/linkedlist"
 )
 
 type IntGraph struct {

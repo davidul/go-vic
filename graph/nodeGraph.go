@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"github.com/davidul/data-structures-go/linkedlist"
+	"github.com/davidul/go-vic/linkedlist"
 )
 
 type NodeGraph struct {

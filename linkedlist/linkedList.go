@@ -28,6 +28,7 @@ func (n *Node) Data() any {
 	return n.data
 }
 
+// Head return head of the list
 func (L *LinkedList) Head() *Node {
 	return L.head
 }
@@ -49,10 +50,12 @@ func (L *LinkedList) Add(data any) {
 	L.count++
 }
 
+// AddLast append to tail
 func (L *LinkedList) AddLast(data any) {
 	L.Add(data)
 }
 
+// AddFirst add to head
 func (L *LinkedList) AddFirst(data any) {
 	oldHead := L.head
 	list := &Node{
@@ -82,7 +85,6 @@ func (L *LinkedList) PeekLast() any {
 }
 
 // Remove retrieves and removes the head
-// memory leak or gc will collect it?
 func (L *LinkedList) Remove() any {
 	head := L.head
 	newHead := head.next
@@ -91,6 +93,7 @@ func (L *LinkedList) Remove() any {
 	return head.data
 }
 
+// RemoveLast remove and return tail of the list
 func (L *LinkedList) RemoveLast() any {
 	if L.tail != nil {
 		tail := L.tail
@@ -100,6 +103,7 @@ func (L *LinkedList) RemoveLast() any {
 	return nil
 }
 
+// Poll remove and return
 func (L *LinkedList) Poll() any {
 	return L.Remove()
 }
