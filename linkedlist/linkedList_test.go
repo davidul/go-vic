@@ -1,6 +1,14 @@
 package linkedlist
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
+type Sample struct {
+	n int
+	s string
+}
 
 func TestLinkedList_Add(t *testing.T) {
 	list := LinkedList{}
@@ -18,6 +26,7 @@ func TestLinkedList_Add(t *testing.T) {
 	if size != 2 {
 		t.Fatal("Wrong number of elements")
 	}
+
 }
 
 func TestLinkedList_AddFirst(t *testing.T) {
@@ -58,5 +67,27 @@ func TestLinkedList_AddLast(t *testing.T) {
 	if size != 2 {
 		t.Fatal("Wrong number of elements")
 	}
+}
 
+func TestLinkedList_Contains(t *testing.T) {
+	intList := LinkedList{}
+	structList := LinkedList{}
+
+	intList.Add(1)
+
+	structList.Add(Sample{
+		n: 0,
+		s: "test2",
+	})
+	structList.Add(Sample{
+		n: 1,
+		s: "test",
+	})
+
+	assert.True(t, intList.Contains(1))
+	assert.False(t, intList.Contains(2))
+	assert.True(t, structList.Contains(Sample{
+		n: 1,
+		s: "test",
+	}))
 }
