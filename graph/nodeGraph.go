@@ -5,7 +5,7 @@ import (
 )
 
 type NodeGraph struct {
-	m     map[int]linkedlist.LinkedList
+	m     map[Node]linkedlist.LinkedList
 	count int
 }
 
@@ -21,7 +21,7 @@ func NewGraph() *NodeGraph {
 }
 
 func (G *NodeGraph) Init() {
-	G.m = make(map[int]linkedlist.LinkedList)
+	G.m = make(map[Node]linkedlist.LinkedList)
 }
 
 func (G *NodeGraph) Add(value any) int {
@@ -30,20 +30,20 @@ func (G *NodeGraph) Add(value any) int {
 	node := Node{Value: value,
 		Id: G.count}
 	list.Add(node)
-	G.m[G.count] = list
+	G.m[node] = list
 	return G.count
 }
 
-func (G *NodeGraph) AddEdge(start int, value any) int {
+func (G *NodeGraph) AddEdge(start Node, value any) int {
 	list := G.m[start]
 	G.count++
 	node := Node{Id: G.count, Value: value}
 	list.Add(node)
-	G.m[G.count] = linkedlist.LinkedList{}
+	G.m[node] = linkedlist.LinkedList{}
 	return G.count
 }
 
-func (G *NodeGraph) Bsf(root int, goal any) any {
+func (G *NodeGraph) Bsf(root Node, goal any) any {
 	visited := linkedlist.LinkedList{}
 	queue := linkedlist.LinkedList{}
 	queue.Add(root)
@@ -52,7 +52,7 @@ func (G *NodeGraph) Bsf(root int, goal any) any {
 		if v == goal {
 			return v
 		}
-		list := G.m[v.(int)]
+		list := G.m[v.(Node)]
 		for e := list.Head(); e != nil; e = e.Next() {
 			if !visited.Contains(e) {
 				queue.Add(e.Data())
