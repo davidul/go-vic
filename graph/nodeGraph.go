@@ -1,7 +1,6 @@
 package graph
 
 import (
-	"fmt"
 	"github.com/davidul/go-vic/linkedlist"
 )
 
@@ -12,6 +11,11 @@ type NodeGraph struct {
 
 type Node struct {
 	Value any
+}
+
+type Distance struct {
+	i int
+	n *Node
 }
 
 func NewGraph() *NodeGraph {
@@ -113,11 +117,11 @@ func (G *NodeGraph) Bsf(root *Node, goal any) any {
 	return nil
 }
 
-func (G *NodeGraph) ShortestPath(root *Node, goal any) any {
-	type Distance struct {
-		i int
-		n *Node
-	}
+// ShortestPath with implemented as BSF
+// Returned map contains shortest distance from root to
+// any node on the path
+func (G *NodeGraph) ShortestPath(root *Node, goal any) map[*Node]Distance {
+
 	visited := linkedlist.LinkedList{}
 	queue := linkedlist.LinkedList{}
 	queue.Add(root)
@@ -130,27 +134,34 @@ func (G *NodeGraph) ShortestPath(root *Node, goal any) any {
 
 	for !queue.IsEmpty() {
 		v := queue.Poll()
+		//fmt.Printf("Processing node %s \n", v.(*Node).Value)
 		visited.Add(v)
 		vv := v.(*Node).Value
 		if vv == goal {
-			return vv
+			return distanceMap
 		}
 		node := v.(*Node)
 		list := G.m[node]
 		for e := list.Head(); e != nil; e = e.Next() {
+			//fmt.Printf("Children %s \n", e.Data().(*Node).Value)
 			distance := distanceMap[v.(*Node)]
+			//fmt.Printf("Distance %d \n", distance.i)
 			if !visited.Contains(e.Data()) {
+				//fmt.Println("Not visited yet")
 				d := Distance{
 					i: distance.i + 1,
 					n: e.Data().(*Node),
 				}
-				distanceMap[e.Data().(*Node)] = d
+				//fmt.Printf("New Distance %d \n", distance.i+1)
+				if nn, ok := distanceMap[e.Data().(*Node)]; ok {
+					if nn.i >= d.i {
+						distanceMap[e.Data().(*Node)] = d
+					}
+				} else {
+					distanceMap[e.Data().(*Node)] = d
+				}
 				queue.Add(e.Data())
 			}
-		}
-
-		for n := range distanceMap {
-			fmt.Printf("Distance to root %d from %s \n", distanceMap[n].i, distanceMap[n].n.Value)
 		}
 	}
 	return nil

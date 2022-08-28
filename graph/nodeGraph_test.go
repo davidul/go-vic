@@ -72,4 +72,41 @@ func TestBox(t *testing.T) {
 	bsf := graph.Bsf(A, "F")
 	assert.Equal(t, bsf, "F")
 
+	path := graph.ShortestPath(A, "F")
+	for node := range path {
+		fmt.Println(node.Value)
+		fmt.Println(path[node].i)
+	}
+}
+
+// A -- B -- C -- D -- I
+//      |              |
+//      E -- F -- H ---|
+//      |
+//      G
+func TestBox1(t *testing.T) {
+	graph := NewGraph()
+	A, B := graph.AddEdgeValues("A", "B")
+	C := graph.Add("C")
+	D := graph.Add("D")
+	E := graph.Add("E")
+	F := graph.Add("F")
+	G := graph.Add("G")
+	H := graph.Add("H")
+	I := graph.Add("I")
+
+	graph.AddEdge(B, C)
+	graph.AddEdge(C, D)
+	graph.AddEdge(D, I)
+	graph.AddEdge(B, E)
+	graph.AddEdge(E, G)
+	graph.AddEdge(E, F)
+	graph.AddEdge(F, H)
+	graph.AddEdge(H, I)
+
+	bsf := graph.Bsf(A, "H")
+	assert.Equal(t, bsf, "H")
+
+	path := graph.ShortestPath(A, "H")
+	assert.Equal(t, path[H].i, 4)
 }
