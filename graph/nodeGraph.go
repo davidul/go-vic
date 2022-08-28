@@ -167,6 +167,28 @@ func (G *NodeGraph) ShortestPath(root *Node, goal any) map[*Node]Distance {
 	return nil
 }
 
-func (G *NodeGraph) dsf() {
+func (G *NodeGraph) Dsf(root *Node, goal any) any {
+	stack := linkedlist.LinkedList{}
+	visited := linkedlist.LinkedList{}
+
+	stack.AddFirst(root)
+
+	for !stack.IsEmpty() {
+		v := stack.Poll()
+		visited.Add(v)
+		value := v.(*Node).Value
+		if value == goal {
+			return value
+		}
+		list := G.m[v.(*Node)]
+		for e := list.Head(); e != nil; e = e.Next() {
+			if !visited.Contains(e.Data()) {
+				stack.AddFirst(e.Data())
+			}
+		}
+
+	}
+
+	return nil
 
 }

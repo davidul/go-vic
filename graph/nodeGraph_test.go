@@ -72,11 +72,8 @@ func TestBox(t *testing.T) {
 	bsf := graph.Bsf(A, "F")
 	assert.Equal(t, bsf, "F")
 
-	path := graph.ShortestPath(A, "F")
-	for node := range path {
-		fmt.Println(node.Value)
-		fmt.Println(path[node].i)
-	}
+	dsf := graph.Dsf(A, "F")
+	assert.Equal(t, dsf, "F")
 }
 
 // A -- B -- C -- D -- I
@@ -107,6 +104,13 @@ func TestBox1(t *testing.T) {
 	bsf := graph.Bsf(A, "H")
 	assert.Equal(t, bsf, "H")
 
+	dsf := graph.Dsf(A, "H")
+	assert.Equal(t, dsf, "H")
+
 	path := graph.ShortestPath(A, "H")
 	assert.Equal(t, path[H].i, 4)
+}
+
+func TestNodeGraph_Dsf(t *testing.T) {
+
 }
