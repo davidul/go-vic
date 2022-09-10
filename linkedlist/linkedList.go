@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+// Simple linked list structure
+
 type LinkedList struct {
 	head  *Node
 	tail  *Node
@@ -34,7 +36,7 @@ func (L *LinkedList) Head() *Node {
 }
 
 // Add append at the end of the list
-func (L *LinkedList) Add(data any) {
+func (L *LinkedList) Add(data any) *Node {
 	node := &Node{
 		next: nil,
 		prev: nil,
@@ -48,6 +50,7 @@ func (L *LinkedList) Add(data any) {
 		L.tail = L.tail.next
 	}
 	L.count++
+	return node
 }
 
 // AddLast append to tail
@@ -103,11 +106,26 @@ func (L *LinkedList) RemoveLast() any {
 	return nil
 }
 
+// Remove node by reference to the node
+func (L *LinkedList) RemoveNode(node *Node) {
+	for e := L.head; e != nil; e = e.Next() {
+		if e == node {
+			prev := e.prev
+			next := e.next
+			prev.next = next
+			next.prev = prev
+			e = nil
+			break
+		}
+	}
+}
+
 // Poll remove and return
 func (L *LinkedList) Poll() any {
 	return L.Remove()
 }
 
+// Converts linked list to array
 func (L *LinkedList) ToArray() []any {
 	i := make([]any, L.count)
 	e := L.head

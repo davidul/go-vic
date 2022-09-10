@@ -91,3 +91,31 @@ func TestLinkedList_Contains(t *testing.T) {
 		s: "test",
 	}))
 }
+
+func TestLinkedList_RemoveNode(t *testing.T) {
+	structList := LinkedList{}
+	t1 := structList.Add(Sample{
+		n: 0,
+		s: "test0",
+	})
+	t2 := structList.Add(Sample{
+		n: 1,
+		s: "test1",
+	})
+	t3 := structList.Add(Sample{
+		n: 2,
+		s: "test2",
+	})
+	t4 := structList.Add(Sample{
+		n: 3,
+		s: "test3",
+	})
+
+	structList.RemoveNode(t3)
+	head := structList.Head()
+	assert.Equal(t, head, t1)
+	assert.Equal(t, head.next, t2)
+	assert.Equal(t, head.next.next, t4)
+	assert.Nil(t, head.next.next.next)
+
+}
