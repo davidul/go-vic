@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"fmt"
 	"github.com/davidul/go-vic/linkedlist"
 )
 
@@ -203,6 +204,26 @@ func (G *NodeGraph) SimpleDelete(node *Node) {
 		delete(G.m, node)
 		for e := list.Head(); e != nil; e = e.Next() {
 			list.RemoveNode(e)
+		}
+	}
+}
+
+func (G *NodeGraph) Print(node *Node) {
+	visited := linkedlist.LinkedList{}
+	queue := linkedlist.LinkedList{}
+	queue.Add(node)
+
+	for !queue.IsEmpty() {
+		v := queue.Poll()
+		visited.Add(v)
+		vv := v.(*Node).Value
+		fmt.Println(vv)
+		node := v.(*Node)
+		list := G.m[node]
+		for e := list.Head(); e != nil; e = e.Next() {
+			if !visited.Contains(e.Data()) {
+				queue.Add(e.Data())
+			}
 		}
 	}
 }

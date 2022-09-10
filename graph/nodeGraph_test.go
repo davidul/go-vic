@@ -3,6 +3,8 @@ package graph
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -112,6 +114,43 @@ func TestBox1(t *testing.T) {
 	assert.Equal(t, path[H].i, 4)
 }
 
+func addChildren(G *NodeGraph, parentNode *Node, parentDir string, entry os.DirEntry) {
+	dir, err := os.ReadDir(parentDir)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, i := range dir {
+		if i.IsDir() {
+			G.Add(filepath.Join(parentDir, i.Name()))
+			addChildren(G, parentNode, filepath.Join(parentDir, i.Name()), i)
+		} else {
+			G.AddEdgeNodeValue(parentNode, filepath.Join(parentDir, i.Name()))
+		}
+	}
+}
+
+func TestFileSystem(t *testing.T) {
+	topDir := "/Users/david/godir-test"
+	dir, err := os.ReadDir(topDir)
+	if err != nil {
+		panic(err)
+	}
+
+	graph := NewGraph()
+
+	parentNode := graph.Add(topDir)
+	for _, d := range dir {
+		if d.IsDir() {
+			next := graph.AddEdgeNodeValue(parentNode, filepath.Join(topDir, d.Name()))
+			addChildren(graph, next, filepath.Join(topDir, d.Name()), d)
+		} else {
+			graph.AddEdgeNodeValue(parentNode, filepath.Join(topDir, d.Name()))
+		}
+	}
+
+	graph.Print(parentNode)
+}
 func TestNodeGraph_Dsf(t *testing.T) {
 
 }
