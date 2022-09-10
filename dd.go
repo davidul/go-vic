@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/davidul/data-structures-go/graph/intgraph"
-	"github.com/davidul/data-structures-go/linkedlist"
+	"github.com/davidul/go-vic/graph/intgraph"
+	"github.com/davidul/go-vic/linkedlist"
 )
 
 func main() {

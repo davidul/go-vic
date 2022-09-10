@@ -23,6 +23,7 @@ func TestNodeGraph_Add(t *testing.T) {
 		s: "n1",
 	}
 	node1 := graph.Add(testType)
+	graph.Add(testType) // no duplicates
 
 	assert.Equal(t, graph.count, 1)
 
@@ -34,7 +35,7 @@ func TestNodeGraph_Add(t *testing.T) {
 	assert.Equal(t, graph.count, 2)
 
 	bsf := graph.Bsf(node1, testType)
-	assert.Equal(t, bsf, testType)
+	assert.Equal(t, bsf.Value, testType)
 }
 
 func TestNodeGraph_AddEdge(t *testing.T) {

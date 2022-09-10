@@ -29,6 +29,14 @@ func (G *NodeGraph) Init() {
 }
 
 func (G *NodeGraph) Add(value any) *Node {
+	if len(G.m) > 0 {
+		for node, _ := range G.m {
+			bsf := G.Bsf(node, value)
+			if bsf != nil {
+				return bsf
+			}
+		}
+	}
 	G.count++
 	list := &linkedlist.LinkedList{}
 	node := &Node{Value: value}
@@ -94,7 +102,7 @@ func (G *NodeGraph) AddEdgeNodeValue(start *Node, end any) *Node {
 	return n
 }
 
-func (G *NodeGraph) Bsf(root *Node, goal any) any {
+func (G *NodeGraph) Bsf(root *Node, goal any) *Node {
 	visited := linkedlist.LinkedList{}
 	queue := linkedlist.LinkedList{}
 	queue.Add(root)
@@ -104,7 +112,7 @@ func (G *NodeGraph) Bsf(root *Node, goal any) any {
 		visited.Add(v)
 		vv := v.(*Node).Value
 		if vv == goal {
-			return vv
+			return v.(*Node)
 		}
 		node := v.(*Node)
 		list := G.m[node]
@@ -118,7 +126,7 @@ func (G *NodeGraph) Bsf(root *Node, goal any) any {
 }
 
 // ShortestPath with implemented as BSF
-// Returned map contains shortest distance from root to
+// Returned map contains the shortest distance from root to
 // any node on the path
 func (G *NodeGraph) ShortestPath(root *Node, goal any) map[*Node]Distance {
 
@@ -186,9 +194,15 @@ func (G *NodeGraph) Dsf(root *Node, goal any) any {
 				stack.AddFirst(e.Data())
 			}
 		}
-
 	}
-
 	return nil
+}
 
+func (G *NodeGraph) SimpleDelete(node *Node) {
+	if list, ok := G.m[node]; ok {
+		delete(G.m, node)
+		for e := list.Head(); e != nil; e = e.Next() {
+			list.RemoveNode(e)
+		}
+	}
 }
