@@ -6,7 +6,7 @@ import (
 )
 
 type TreeNode struct {
-	value    any
+	Value    any
 	children *linkedlist.LinkedList
 }
 
@@ -17,7 +17,7 @@ type Tree struct {
 func NewTree(value any) *Tree {
 	return &Tree{
 		root: TreeNode{
-			value:    value,
+			Value:    value,
 			children: &linkedlist.LinkedList{},
 		},
 	}
@@ -33,7 +33,7 @@ func (T *Tree) Root() *TreeNode {
 
 func (TN *TreeNode) Add(value any) *TreeNode {
 	tn := TreeNode{
-		value:    value,
+		Value:    value,
 		children: &linkedlist.LinkedList{},
 	}
 	TN.children.Add(tn)
@@ -42,19 +42,18 @@ func (TN *TreeNode) Add(value any) *TreeNode {
 
 func (T *Tree) InOrder() {
 	T.inOrder(T.root.children)
-	fmt.Println(T.root.value)
+	fmt.Println(T.root.Value)
 }
 
 func (T *Tree) inOrder(nodes *linkedlist.LinkedList) {
 	for x := nodes.Head(); x != nil; x = x.Next() {
 		T.inOrder(x.Data().(TreeNode).children)
-		fmt.Println(x.Data().(TreeNode).value)
+		fmt.Println(x.Data().(TreeNode).Value)
 	}
-
 }
 
 func (T *Tree) PostOrder() {
-	fmt.Println(T.root.value)
+	fmt.Println(T.root.Value)
 }
 
 func (T *Tree) postOrder(nodes *linkedlist.LinkedList) {
@@ -62,7 +61,7 @@ func (T *Tree) postOrder(nodes *linkedlist.LinkedList) {
 		if x.Next() != nil {
 			T.inOrder(x.Data().(TreeNode).children)
 		}
-		fmt.Println(x.Data().(TreeNode).value)
+		fmt.Println(x.Data().(TreeNode).Value)
 	}
 }
 
@@ -73,4 +72,8 @@ func Compare(t1 *Tree, t2 Tree) {
 		t1.root.children
 		t2.root.children
 	}*/
+}
+
+func (T *Tree) Walk() {
+
 }
