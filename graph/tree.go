@@ -40,28 +40,28 @@ func (TN *TreeNode) Add(value any) *TreeNode {
 	return &tn
 }
 
-func (T *Tree) InOrder() {
-	T.inOrder(T.root.children)
-	fmt.Println(T.root.Value)
-}
-
-func (T *Tree) inOrder(nodes *linkedlist.LinkedList) {
-	for x := nodes.Head(); x != nil; x = x.Next() {
-		T.inOrder(x.Data().(TreeNode).children)
-		fmt.Println(x.Data().(TreeNode).Value)
-	}
-}
-
 func (T *Tree) PostOrder() {
+	T.postOrder(T.root.children)
 	fmt.Println(T.root.Value)
 }
 
 func (T *Tree) postOrder(nodes *linkedlist.LinkedList) {
 	for x := nodes.Head(); x != nil; x = x.Next() {
-		if x.Next() != nil {
-			T.inOrder(x.Data().(TreeNode).children)
-		}
+		T.postOrder(x.Data().(TreeNode).children)
 		fmt.Println(x.Data().(TreeNode).Value)
+	}
+}
+
+func (T *Tree) PreOrder() {
+	fmt.Println(T.root.Value)
+	T.preOrder(T.root.children, 1)
+}
+
+func (T *Tree) preOrder(nodes *linkedlist.LinkedList, lvl int) {
+	for x := nodes.Head(); x != nil; x = x.Next() {
+		fmt.Println(x.Data().(TreeNode).Value)
+		lvl += 1
+		T.preOrder(x.Data().(TreeNode).children, lvl)
 	}
 }
 
