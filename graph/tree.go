@@ -3,6 +3,7 @@ package graph
 import (
 	"fmt"
 	"github.com/davidul/go-vic/linkedlist"
+	"math"
 )
 
 type TreeNode struct {
@@ -54,14 +55,38 @@ func (T *Tree) postOrder(nodes *linkedlist.LinkedList) {
 
 func (T *Tree) PreOrder() {
 	fmt.Println(T.root.Value)
-	T.preOrder(T.root.children, 1)
+	T.preOrder(T.root.children, 1, math.MaxInt)
 }
 
-func (T *Tree) preOrder(nodes *linkedlist.LinkedList, lvl int) {
+func (T *Tree) preOrder(nodes *linkedlist.LinkedList, lvl int, stopLvl int) {
+	lvl += 1
+	if stopLvl <= lvl {
+		return
+	}
 	for x := nodes.Head(); x != nil; x = x.Next() {
 		fmt.Println(x.Data().(TreeNode).Value)
-		lvl += 1
-		T.preOrder(x.Data().(TreeNode).children, lvl)
+		T.preOrder(x.Data().(TreeNode).children, lvl, stopLvl)
+	}
+}
+
+func (T *Tree) PreOrderDepth(depth int) {
+	fmt.Println(T.root.Value)
+	T.preOrder(T.root.children, 0, depth)
+}
+
+func (T *Tree) PreOrderDepthFunc(depth int, f func(any)) {
+	f(T.root.Value)
+	T.preOrderFunc(T.root.children, 0, depth, f)
+}
+
+func (T *Tree) preOrderFunc(nodes *linkedlist.LinkedList, lvl int, stopLvl int, f func(any)) {
+	lvl += 1
+	if stopLvl <= lvl {
+		return
+	}
+	for x := nodes.Head(); x != nil; x = x.Next() {
+		f(x.Data().(TreeNode).Value)
+		T.preOrder(x.Data().(TreeNode).children, lvl, stopLvl)
 	}
 }
 

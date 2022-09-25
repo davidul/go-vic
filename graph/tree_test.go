@@ -51,3 +51,18 @@ func TestTree_PostOrder(t *testing.T) {
 	three.Add("6")
 	tree.PostOrder()
 }
+
+/*
+		1
+	2       3
+		4 5 6
+*/
+func TestTree_PreOrderDepth(t *testing.T) {
+	tree := NewTree("1")
+	tree.root.Add("2")
+	three := tree.root.Add("3")
+	three.Add("4")
+	three.Add("5")
+	three.Add("6")
+	tree.PreOrderDepth(2)
+}
