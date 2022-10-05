@@ -41,6 +41,30 @@ func (TN *TreeNode) Add(value any) *TreeNode {
 	return &tn
 }
 
+func (T *Tree) Bsf(goal any) *TreeNode {
+	visited := linkedlist.LinkedList{}
+	queue := linkedlist.LinkedList{}
+	queue.Add(T.root)
+
+	for !queue.IsEmpty() {
+		v := queue.Poll()
+		visited.Add(v)
+		vv := v.(TreeNode).Value
+		if vv == goal {
+			treeNode := v.(TreeNode)
+			return &treeNode
+		}
+		node := v.(TreeNode)
+		list := node.children
+		for e := list.Head(); e != nil; e = e.Next() {
+			if !visited.Contains(e.Data()) {
+				queue.Add(e.Data())
+			}
+		}
+	}
+	return nil
+}
+
 func (T *Tree) PostOrder() {
 	T.postOrder(T.root.children)
 	fmt.Println(T.root.Value)

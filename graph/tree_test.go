@@ -1,6 +1,9 @@
 package graph
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestTree_NewTree(t *testing.T) {
 	tree := NewTree("1")
@@ -65,4 +68,16 @@ func TestTree_PreOrderDepth(t *testing.T) {
 	three.Add("5")
 	three.Add("6")
 	tree.PreOrderDepth(2)
+}
+
+func TestTree_Bsf(t *testing.T) {
+	tree := NewTree("1")
+	tree.root.Add("2")
+	three := tree.root.Add("3")
+	three.Add("4")
+	three.Add("5")
+	three.Add("6")
+
+	bsf := tree.Bsf("6")
+	fmt.Println(bsf.Value)
 }
