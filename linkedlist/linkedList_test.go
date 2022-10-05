@@ -119,3 +119,51 @@ func TestLinkedList_RemoveNode(t *testing.T) {
 	assert.Nil(t, head.next.next.next)
 
 }
+
+func TestLinkedList_Compare(t *testing.T) {
+	structList := LinkedList{}
+	structList.Add(Sample{
+		n: 0,
+		s: "test0",
+	})
+	structList.Add(Sample{
+		n: 1,
+		s: "test1",
+	})
+	structList.Add(Sample{
+		n: 2,
+		s: "test2",
+	})
+	structList.Add(Sample{
+		n: 3,
+		s: "test3",
+	})
+
+	structList2 := LinkedList{}
+	structList2.Add(Sample{
+		n: 0,
+		s: "test0",
+	})
+	structList2.Add(Sample{
+		n: 1,
+		s: "test1",
+	})
+	structList2.Add(Sample{
+		n: 2,
+		s: "test2",
+	})
+	structList2.Add(Sample{
+		n: 3,
+		s: "test3",
+	})
+
+	assert.True(t, structList.Compare(&structList2))
+	assert.True(t, structList2.Compare(&structList))
+
+	structList.Poll()
+	assert.False(t, structList.Compare(&structList2))
+	assert.False(t, structList2.Compare(&structList))
+
+	structList2.Poll()
+	assert.True(t, structList.Compare(&structList2))
+}

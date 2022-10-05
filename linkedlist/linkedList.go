@@ -161,10 +161,27 @@ func (L *LinkedList) IsEmpty() bool {
 func (L *LinkedList) Size() int {
 	return L.count
 }
+
 func (L *LinkedList) Print() {
 	list := L.head
 	for list != nil {
 		fmt.Println(list.data)
 		list = list.next
 	}
+}
+
+func (L *LinkedList) Compare(other *LinkedList) bool {
+	if L.Size() == other.Size() {
+		oe := other.Head()
+		for e := L.head; e != nil; e = e.next {
+			if e.Data() != oe.Data() {
+				return false
+			} else {
+				oe = oe.Next()
+			}
+		}
+	} else {
+		return false
+	}
+	return true
 }
