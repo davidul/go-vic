@@ -8,7 +8,7 @@ import (
 
 type TreeNode struct {
 	Value    any
-	children *linkedlist.LinkedList
+	Children *linkedlist.LinkedList
 }
 
 type Tree struct {
@@ -19,7 +19,7 @@ func NewTree(value any) *Tree {
 	return &Tree{
 		root: TreeNode{
 			Value:    value,
-			children: &linkedlist.LinkedList{},
+			Children: &linkedlist.LinkedList{},
 		},
 	}
 }
@@ -35,9 +35,9 @@ func (T *Tree) Root() *TreeNode {
 func (TN *TreeNode) Add(value any) *TreeNode {
 	tn := TreeNode{
 		Value:    value,
-		children: &linkedlist.LinkedList{},
+		Children: &linkedlist.LinkedList{},
 	}
-	TN.children.Add(tn)
+	TN.Children.Add(tn)
 	return &tn
 }
 
@@ -55,7 +55,7 @@ func (T *Tree) Bsf(goal any) *TreeNode {
 			return &treeNode
 		}
 		node := v.(TreeNode)
-		list := node.children
+		list := node.Children
 		for e := list.Head(); e != nil; e = e.Next() {
 			if !visited.Contains(e.Data()) {
 				queue.Add(e.Data())
@@ -66,20 +66,20 @@ func (T *Tree) Bsf(goal any) *TreeNode {
 }
 
 func (T *Tree) PostOrder() {
-	T.postOrder(T.root.children)
+	T.postOrder(T.root.Children)
 	fmt.Println(T.root.Value)
 }
 
 func (T *Tree) postOrder(nodes *linkedlist.LinkedList) {
 	for x := nodes.Head(); x != nil; x = x.Next() {
-		T.postOrder(x.Data().(TreeNode).children)
+		T.postOrder(x.Data().(TreeNode).Children)
 		fmt.Println(x.Data().(TreeNode).Value)
 	}
 }
 
 func (T *Tree) PreOrder() {
 	fmt.Println(T.root.Value)
-	T.preOrder(T.root.children, 1, math.MaxInt)
+	T.preOrder(T.root.Children, 1, math.MaxInt)
 }
 
 func (T *Tree) preOrder(nodes *linkedlist.LinkedList, lvl int, stopLvl int) {
@@ -89,18 +89,18 @@ func (T *Tree) preOrder(nodes *linkedlist.LinkedList, lvl int, stopLvl int) {
 	}
 	for x := nodes.Head(); x != nil; x = x.Next() {
 		fmt.Println(x.Data().(TreeNode).Value)
-		T.preOrder(x.Data().(TreeNode).children, lvl, stopLvl)
+		T.preOrder(x.Data().(TreeNode).Children, lvl, stopLvl)
 	}
 }
 
 func (T *Tree) PreOrderDepth(depth int) {
 	fmt.Println(T.root.Value)
-	T.preOrder(T.root.children, 0, depth)
+	T.preOrder(T.root.Children, 0, depth)
 }
 
 func (T *Tree) PreOrderDepthFunc(depth int, f func(any)) {
 	f(T.root.Value)
-	T.preOrderFunc(T.root.children, 0, depth, f)
+	T.preOrderFunc(T.root.Children, 0, depth, f)
 }
 
 func (T *Tree) preOrderFunc(nodes *linkedlist.LinkedList, lvl int, stopLvl int, f func(any)) {
@@ -110,7 +110,7 @@ func (T *Tree) preOrderFunc(nodes *linkedlist.LinkedList, lvl int, stopLvl int, 
 	}
 	for x := nodes.Head(); x != nil; x = x.Next() {
 		f(x.Data().(TreeNode).Value)
-		T.preOrder(x.Data().(TreeNode).children, lvl, stopLvl)
+		T.preOrder(x.Data().(TreeNode).Children, lvl, stopLvl)
 	}
 }
 
@@ -118,8 +118,8 @@ func Compare(t1 *Tree, t2 Tree) {
 	/*tr1 := t1.root.value
 	tr2 := t2.root.value
 	if tr1 == tr2 {
-		t1.root.children
-		t2.root.children
+		t1.root.Children
+		t2.root.Children
 	}*/
 }
 
