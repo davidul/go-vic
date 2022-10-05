@@ -73,7 +73,7 @@ func TestBox(t *testing.T) {
 	graph.AddEdge(D, E)
 
 	bsf := graph.Bsf(A, "F")
-	assert.Equal(t, bsf, "F")
+	assert.Equal(t, bsf.Value, "F")
 
 	dsf := graph.Dsf(A, "F")
 	assert.Equal(t, dsf, "F")
@@ -105,7 +105,7 @@ func TestBox1(t *testing.T) {
 	graph.AddEdge(H, I)
 
 	bsf := graph.Bsf(A, "H")
-	assert.Equal(t, bsf, "H")
+	assert.Equal(t, bsf.Value, "H")
 
 	dsf := graph.Dsf(A, "H")
 	assert.Equal(t, dsf, "H")
@@ -128,6 +128,12 @@ func addChildren(G *NodeGraph, parentNode *Node, parentDir string, entry os.DirE
 			G.AddEdgeNodeValue(parentNode, filepath.Join(parentDir, i.Name()))
 		}
 	}
+}
+
+func TestX(t *testing.T) {
+	fmt.Println("\033[31m Hello Red")
+	fmt.Println("\033[S")
+	fmt.Println("\033[C Move right")
 }
 
 func TestFileSystem(t *testing.T) {

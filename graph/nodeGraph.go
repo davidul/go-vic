@@ -5,11 +5,13 @@ import (
 	"github.com/davidul/go-vic/linkedlist"
 )
 
+// NodeGraph Graph represented as adjacency list
 type NodeGraph struct {
 	m     map[*Node]*linkedlist.LinkedList
 	count int
 }
 
+// Node is just a wrapper for any
 type Node struct {
 	Value any
 }
@@ -19,16 +21,20 @@ type Distance struct {
 	n *Node
 }
 
+// NewGraph initialize the empty graph
 func NewGraph() *NodeGraph {
 	i := new(NodeGraph)
-	i.Init()
+	i.init()
 	return i
 }
 
-func (G *NodeGraph) Init() {
+func (G *NodeGraph) init() {
 	G.m = make(map[*Node]*linkedlist.LinkedList)
 }
 
+// Add value to a graph and return it as *Node
+// If value already exists inside the graph, this value
+// is returned and no new node is added
 func (G *NodeGraph) Add(value any) *Node {
 	if len(G.m) > 0 {
 		for node, _ := range G.m {
@@ -103,6 +109,7 @@ func (G *NodeGraph) AddEdgeNodeValue(start *Node, end any) *Node {
 	return n
 }
 
+// Bsf Breadth First Search
 func (G *NodeGraph) Bsf(root *Node, goal any) *Node {
 	visited := linkedlist.LinkedList{}
 	queue := linkedlist.LinkedList{}
@@ -176,6 +183,7 @@ func (G *NodeGraph) ShortestPath(root *Node, goal any) map[*Node]Distance {
 	return nil
 }
 
+//Dsf Depth first search
 func (G *NodeGraph) Dsf(root *Node, goal any) any {
 	stack := linkedlist.LinkedList{}
 	visited := linkedlist.LinkedList{}
