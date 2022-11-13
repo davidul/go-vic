@@ -1,4 +1,4 @@
-package graph
+package trees
 
 import (
 	"fmt"
@@ -32,6 +32,7 @@ func (T *Tree) Root() *TreeNode {
 	return &T.root
 }
 
+// Add new TreeNode to the tree.
 func (TN *TreeNode) Add(value any) *TreeNode {
 	tn := TreeNode{
 		Value:    value,
@@ -41,6 +42,11 @@ func (TN *TreeNode) Add(value any) *TreeNode {
 	return &tn
 }
 
+func (TN *TreeNode) Delete() {
+
+}
+
+// Bsf - Breadth First Search on the tree
 func (T *Tree) Bsf(goal any) *TreeNode {
 	visited := linkedlist.LinkedList{}
 	queue := linkedlist.LinkedList{}
