@@ -14,19 +14,20 @@ type TestType struct {
 }
 
 func TestNewGraph(t *testing.T) {
-	graph := NewGraph()
+	graph := NewGraph[string]()
 	assert.Equal(t, graph.count, 0)
 }
 
 func TestNodeGraph_Add(t *testing.T) {
-	graph := NewGraph()
+	graph := NewGraph[TestType]()
 	testType := TestType{
 		n: 0,
 		s: "n1",
 	}
 	node1 := graph.Add(testType)
-	graph.Add(testType) // no duplicates
+	node2 := graph.Add(testType) // no duplicates
 
+	assert.Equal(t, node1, node2)
 	assert.Equal(t, graph.count, 1)
 
 	graph.Add(TestType{
@@ -41,7 +42,7 @@ func TestNodeGraph_Add(t *testing.T) {
 }
 
 func TestNodeGraph_AddEdge(t *testing.T) {
-	graph := NewGraph()
+	graph := NewGraph[Node]()
 	node1 := Node{
 		Value: "n1",
 	}
@@ -62,7 +63,7 @@ func TestNodeGraph_AddEdge(t *testing.T) {
 // |		 |
 // D -- E -- F
 func TestBox(t *testing.T) {
-	graph := NewGraph()
+	graph := NewGraph[string]()
 
 	A, B := graph.AddEdgeValues("A", "B")
 	D, E := graph.AddEdgeValues("D", "E")
@@ -80,12 +81,13 @@ func TestBox(t *testing.T) {
 }
 
 // A -- B -- C -- D -- I
-//      |              |
-//      E -- F -- H ---|
-//      |
-//      G
+//
+//	|              |
+//	E -- F -- H ---|
+//	|
+//	G
 func TestBox1(t *testing.T) {
-	graph := NewGraph()
+	graph := NewGraph[string]()
 	A, B := graph.AddEdgeValues("A", "B")
 	C := graph.Add("C")
 	D := graph.Add("D")
@@ -114,7 +116,7 @@ func TestBox1(t *testing.T) {
 	assert.Equal(t, path[H].i, 4)
 }
 
-func addChildren(G *NodeGraph, parentNode *Node, parentDir string, entry os.DirEntry) {
+func addChildren[T interface{}](G *NodeGraph[T], parentNode *Node, parentDir string, entry os.DirEntry) {
 	dir, err := os.ReadDir(parentDir)
 	if err != nil {
 		fmt.Println(err)
@@ -143,7 +145,7 @@ func TestFileSystem(t *testing.T) {
 		panic(err)
 	}
 
-	graph := NewGraph()
+	graph := NewGraph[string]()
 
 	parentNode := graph.Add(topDir)
 	for _, d := range dir {
