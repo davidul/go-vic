@@ -70,7 +70,7 @@ func TestLinkedList_AddLast(t *testing.T) {
 }
 
 func TestLinkedList_Contains(t *testing.T) {
-	intList := LinkedList[Sample]{}
+	intList := LinkedList[int]{}
 	structList := LinkedList[Sample]{}
 
 	intList.Add(1)

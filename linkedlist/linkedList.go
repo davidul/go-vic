@@ -7,17 +7,17 @@ import (
 // LinkedList Simple linked list structure.
 // Pointer to head and tail of the list.
 // Count is the number of node.
-type LinkedList[T interface{}] struct {
+type LinkedList[T comparable] struct {
 	head  *Node[T]
 	tail  *Node[T]
 	count int
 }
 
-type Node[T interface{}] struct {
+type Node[T comparable] struct {
 	next *Node[T]
 	prev *Node[T]
 	//list *LinkedList
-	data any
+	data T
 }
 
 func (n *Node[T]) Next() *Node[T] {
@@ -28,7 +28,7 @@ func (n *Node[T]) Next() *Node[T] {
 }
 
 // Data Node data
-func (n *Node[T]) Data() any {
+func (n *Node[T]) Data() T {
 	return n.data
 }
 
@@ -38,7 +38,7 @@ func (L *LinkedList[T]) Head() *Node[T] {
 }
 
 // Add append at the end of the list
-func (L *LinkedList[T]) Add(data any) *Node[T] {
+func (L *LinkedList[T]) Add(data T) *Node[T] {
 	node := &Node[T]{
 		next: nil,
 		prev: nil,
@@ -56,12 +56,12 @@ func (L *LinkedList[T]) Add(data any) *Node[T] {
 }
 
 // AddLast append to tail
-func (L *LinkedList[T]) AddLast(data any) {
+func (L *LinkedList[T]) AddLast(data T) {
 	L.Add(data)
 }
 
 // AddFirst prepend to head. New head is being created.
-func (L *LinkedList[T]) AddFirst(data any) {
+func (L *LinkedList[T]) AddFirst(data T) {
 	oldHead := L.head
 	list := &Node[T]{
 		next: oldHead,
@@ -81,16 +81,17 @@ func (L *LinkedList[T]) Peek() any {
 }
 
 // PeekLast returns but does not remove the tail element
-func (L *LinkedList[T]) PeekLast() any {
+func (L *LinkedList[T]) PeekLast() T {
 	if L.tail != nil {
 		return L.tail.data
 	} else {
-		return nil
+		var result T
+		return result
 	}
 }
 
 // Remove retrieves and removes the head
-func (L *LinkedList[T]) Remove() any {
+func (L *LinkedList[T]) Remove() T {
 	head := L.head
 	newHead := head.next
 	L.head = newHead
@@ -99,13 +100,14 @@ func (L *LinkedList[T]) Remove() any {
 }
 
 // RemoveLast remove and return tail of the list
-func (L *LinkedList[T]) RemoveLast() any {
+func (L *LinkedList[T]) RemoveLast() T {
 	if L.tail != nil {
 		tail := L.tail
 		L.tail = nil
 		return tail.data
 	}
-	return nil
+	var result T
+	return result
 }
 
 // Remove node by reference to the node
@@ -123,7 +125,7 @@ func (L *LinkedList[T]) RemoveNode(node *Node[T]) {
 }
 
 // Poll remove and return
-func (L *LinkedList[T]) Poll() any {
+func (L *LinkedList[T]) Poll() T {
 	return L.Remove()
 }
 
@@ -140,7 +142,7 @@ func (L *LinkedList[T]) ToArray() []any {
 	return i
 }
 
-func (L *LinkedList[T]) Contains(v any) bool {
+func (L *LinkedList[T]) Contains(v T) bool {
 	for e := L.head; e != nil; e = e.Next() {
 		if e.Data() == v {
 			return true
