@@ -6,14 +6,14 @@ import (
 	"math"
 )
 
-// node in the tree holds value T
+// TreeNode node in the tree holds value T
 // and list to its children of type T
 type TreeNode[T comparable] struct {
 	Value    T
 	Children *linkedlist.LinkedList[TreeNode[T]]
 }
 
-// TreeNode holds reference to root
+// Tree TreeNode holds reference to root
 type Tree[T comparable] struct {
 	root TreeNode[T]
 }

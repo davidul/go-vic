@@ -6,7 +6,7 @@ import (
 )
 
 func TestBinarySearchTree_Add(t *testing.T) {
-	bst := NewBST()
+	bst := NewBST[int]()
 	bst.Add(5, 5)
 	bst.Add(4, 4)
 	bst.Add(3, 3)
@@ -20,7 +20,7 @@ func TestBinarySearchTree_Add(t *testing.T) {
 }
 
 func TestBinarySearchTree_Balance(t *testing.T) {
-	bst := NewBST()
+	bst := NewBST[int]()
 	bst.Add(1, 1)
 	bst.Add(2, 2)
 	bst.Add(3, 3)
