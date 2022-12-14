@@ -42,17 +42,11 @@ func TestNodeGraph_Add(t *testing.T) {
 }
 
 func TestNodeGraph_AddEdge(t *testing.T) {
-	graph := NewGraph[Node]()
-	node1 := Node{
-		Value: "n1",
-	}
+	graph := NewGraph[string]()
 
-	add := graph.Add(node1)
-
-	node2 := Node{
-		Value: "n2",
-	}
-	graph.AddEdge(add, &node2)
+	add := graph.Add("n1")
+	n2 := graph.Add("n2")
+	graph.AddEdge(add, n2)
 
 	bsf := graph.Bsf(add, "n2")
 	fmt.Println(bsf)
@@ -116,7 +110,7 @@ func TestBox1(t *testing.T) {
 	assert.Equal(t, path[H].i, 4)
 }
 
-func addChildren[T interface{}](G *NodeGraph[T], parentNode *Node, parentDir string, entry os.DirEntry) {
+func addChildren(G *NodeGraph[string], parentNode *Node[string], parentDir string, entry os.DirEntry) {
 	dir, err := os.ReadDir(parentDir)
 	if err != nil {
 		fmt.Println(err)
