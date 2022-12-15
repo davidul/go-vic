@@ -4,40 +4,42 @@ import (
 	"fmt"
 )
 
-// Simple linked list structure
-
-type LinkedList struct {
-	head  *Node
-	tail  *Node
+// LinkedList Simple linked list structure.
+// Pointer to head and tail of the list.
+// Count is the number of node.
+type LinkedList[T comparable] struct {
+	head  *Node[T]
+	tail  *Node[T]
 	count int
 }
 
-type Node struct {
-	next *Node
-	prev *Node
-	list *LinkedList
-	data any
+type Node[T comparable] struct {
+	next *Node[T]
+	prev *Node[T]
+	//list *LinkedList
+	data T
 }
 
-func (n *Node) Next() *Node {
+func (n *Node[T]) Next() *Node[T] {
 	if n.next != nil {
 		return n.next
 	}
 	return nil
 }
 
-func (n *Node) Data() any {
+// Data Node data
+func (n *Node[T]) Data() T {
 	return n.data
 }
 
 // Head return head of the list
-func (L *LinkedList) Head() *Node {
+func (L *LinkedList[T]) Head() *Node[T] {
 	return L.head
 }
 
 // Add append at the end of the list
-func (L *LinkedList) Add(data any) *Node {
-	node := &Node{
+func (L *LinkedList[T]) Add(data T) *Node[T] {
+	node := &Node[T]{
 		next: nil,
 		prev: nil,
 		data: data}
@@ -54,14 +56,14 @@ func (L *LinkedList) Add(data any) *Node {
 }
 
 // AddLast append to tail
-func (L *LinkedList) AddLast(data any) {
+func (L *LinkedList[T]) AddLast(data T) {
 	L.Add(data)
 }
 
-// AddFirst add to head
-func (L *LinkedList) AddFirst(data any) {
+// AddFirst prepend to head. New head is being created.
+func (L *LinkedList[T]) AddFirst(data T) {
 	oldHead := L.head
-	list := &Node{
+	list := &Node[T]{
 		next: oldHead,
 		data: data,
 	}
@@ -70,7 +72,7 @@ func (L *LinkedList) AddFirst(data any) {
 }
 
 // Peek returns but does not remove the head element
-func (L *LinkedList) Peek() any {
+func (L *LinkedList[T]) Peek() any {
 	if L.head != nil {
 		return L.head.data
 	} else {
@@ -79,16 +81,17 @@ func (L *LinkedList) Peek() any {
 }
 
 // PeekLast returns but does not remove the tail element
-func (L *LinkedList) PeekLast() any {
+func (L *LinkedList[T]) PeekLast() T {
 	if L.tail != nil {
 		return L.tail.data
 	} else {
-		return nil
+		var result T
+		return result
 	}
 }
 
 // Remove retrieves and removes the head
-func (L *LinkedList) Remove() any {
+func (L *LinkedList[T]) Remove() T {
 	head := L.head
 	newHead := head.next
 	L.head = newHead
@@ -97,17 +100,18 @@ func (L *LinkedList) Remove() any {
 }
 
 // RemoveLast remove and return tail of the list
-func (L *LinkedList) RemoveLast() any {
+func (L *LinkedList[T]) RemoveLast() T {
 	if L.tail != nil {
 		tail := L.tail
 		L.tail = nil
 		return tail.data
 	}
-	return nil
+	var result T
+	return result
 }
 
 // Remove node by reference to the node
-func (L *LinkedList) RemoveNode(node *Node) {
+func (L *LinkedList[T]) RemoveNode(node *Node[T]) {
 	for e := L.head; e != nil; e = e.Next() {
 		if e == node {
 			prev := e.prev
@@ -121,12 +125,12 @@ func (L *LinkedList) RemoveNode(node *Node) {
 }
 
 // Poll remove and return
-func (L *LinkedList) Poll() any {
+func (L *LinkedList[T]) Poll() T {
 	return L.Remove()
 }
 
 // Converts linked list to array
-func (L *LinkedList) ToArray() []any {
+func (L *LinkedList[T]) ToArray() []any {
 	i := make([]any, L.count)
 	e := L.head
 	c := 0
@@ -138,7 +142,7 @@ func (L *LinkedList) ToArray() []any {
 	return i
 }
 
-func (L *LinkedList) Contains(v any) bool {
+func (L *LinkedList[T]) Contains(v T) bool {
 	for e := L.head; e != nil; e = e.Next() {
 		if e.Data() == v {
 			return true
@@ -147,7 +151,7 @@ func (L *LinkedList) Contains(v any) bool {
 	return false
 }
 
-func (L *LinkedList) IsEmpty() bool {
+func (L *LinkedList[T]) IsEmpty() bool {
 	if L.head == nil {
 		return true
 	}
@@ -158,11 +162,11 @@ func (L *LinkedList) IsEmpty() bool {
 //
 //}
 
-func (L *LinkedList) Size() int {
+func (L *LinkedList[T]) Size() int {
 	return L.count
 }
 
-func (L *LinkedList) Print() {
+func (L *LinkedList[T]) Print() {
 	list := L.head
 	for list != nil {
 		fmt.Println(list.data)
@@ -170,7 +174,7 @@ func (L *LinkedList) Print() {
 	}
 }
 
-func (L *LinkedList) Compare(other *LinkedList) bool {
+func (L *LinkedList[T]) Compare(other *LinkedList[T]) bool {
 	if L.Size() == other.Size() {
 		oe := other.Head()
 		for e := L.head; e != nil; e = e.next {

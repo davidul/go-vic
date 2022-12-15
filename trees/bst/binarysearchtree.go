@@ -1,28 +1,28 @@
 package bst
 
-type BinarySearchTree struct {
-	root *BSTNode
+type BinarySearchTree[T comparable] struct {
+	root *BSTNode[T]
 }
 
-type BSTNode struct {
-	value any
+type BSTNode[T comparable] struct {
+	value T
 	key   int32
-	left  *BSTNode
-	right *BSTNode
+	left  *BSTNode[T]
+	right *BSTNode[T]
 }
 
 type Height struct {
 	height int
 }
 
-func NewBST() *BinarySearchTree {
-	b := new(BinarySearchTree)
+func NewBST[T comparable]() *BinarySearchTree[T] {
+	b := new(BinarySearchTree[T])
 	return b
 }
 
-func (B *BinarySearchTree) Add(key int32, value any) {
+func (B *BinarySearchTree[T]) Add(key int32, value T) {
 	if B.root == nil {
-		b := new(BSTNode)
+		b := new(BSTNode[T])
 		b.value = value
 		b.key = key
 		B.root = b
@@ -31,7 +31,7 @@ func (B *BinarySearchTree) Add(key int32, value any) {
 	}
 }
 
-func (B *BinarySearchTree) isHeightBalanced(node *BSTNode, height Height) (bool, Height) {
+func (B *BinarySearchTree[T]) isHeightBalanced(node *BSTNode[T], height Height) (bool, Height) {
 	if node == nil {
 		height.height = 0
 		return true, height
@@ -57,11 +57,11 @@ func (B *BinarySearchTree) isHeightBalanced(node *BSTNode, height Height) (bool,
 
 }
 
-func (B *BinarySearchTree) Traverse() {
+func (B *BinarySearchTree[T]) Traverse() {
 
 }
 
-func (B *BinarySearchTree) find(key int32, node *BSTNode) *BSTNode {
+func (B *BinarySearchTree[T]) find(key int32, node *BSTNode[T]) *BSTNode[T] {
 	if node.key > key {
 		if node.left != nil {
 			return B.find(key, node.left)
@@ -80,15 +80,15 @@ func (B *BinarySearchTree) find(key int32, node *BSTNode) *BSTNode {
 	return nil
 }
 
-func (B *BinarySearchTree) insert(key int32, value any, node *BSTNode) {
+func (B *BinarySearchTree[T]) insert(key int32, value T, node *BSTNode[T]) {
 	find := B.find(key, node)
 	if find != nil {
 		if find.key > key {
-			find.left = new(BSTNode)
+			find.left = new(BSTNode[T])
 			find.left.key = key
 			find.left.value = value
 		} else {
-			find.right = new(BSTNode)
+			find.right = new(BSTNode[T])
 			find.right.key = key
 			find.right.value = value
 		}

@@ -11,7 +11,7 @@ type Sample struct {
 }
 
 func TestLinkedList_Add(t *testing.T) {
-	list := LinkedList{}
+	list := LinkedList[int]{}
 	size := list.Size()
 	if size != 0 {
 		t.Fatal("Wrong number of elements")
@@ -30,7 +30,7 @@ func TestLinkedList_Add(t *testing.T) {
 }
 
 func TestLinkedList_AddFirst(t *testing.T) {
-	list := LinkedList{}
+	list := LinkedList[int]{}
 	list.AddFirst(1)
 	size := list.Size()
 	if size != 1 {
@@ -45,7 +45,7 @@ func TestLinkedList_AddFirst(t *testing.T) {
 }
 
 func TestLinkedList_AddLast(t *testing.T) {
-	list := LinkedList{}
+	list := LinkedList[int]{}
 	list.AddLast(1)
 	size := list.Size()
 	if size != 1 {
@@ -70,8 +70,8 @@ func TestLinkedList_AddLast(t *testing.T) {
 }
 
 func TestLinkedList_Contains(t *testing.T) {
-	intList := LinkedList{}
-	structList := LinkedList{}
+	intList := LinkedList[int]{}
+	structList := LinkedList[Sample]{}
 
 	intList.Add(1)
 
@@ -93,7 +93,7 @@ func TestLinkedList_Contains(t *testing.T) {
 }
 
 func TestLinkedList_RemoveNode(t *testing.T) {
-	structList := LinkedList{}
+	structList := LinkedList[Sample]{}
 	t1 := structList.Add(Sample{
 		n: 0,
 		s: "test0",
@@ -121,7 +121,7 @@ func TestLinkedList_RemoveNode(t *testing.T) {
 }
 
 func TestLinkedList_Compare(t *testing.T) {
-	structList := LinkedList{}
+	structList := LinkedList[Sample]{}
 	structList.Add(Sample{
 		n: 0,
 		s: "test0",
@@ -139,7 +139,7 @@ func TestLinkedList_Compare(t *testing.T) {
 		s: "test3",
 	})
 
-	structList2 := LinkedList{}
+	structList2 := LinkedList[Sample]{}
 	structList2.Add(Sample{
 		n: 0,
 		s: "test0",
