@@ -167,3 +167,23 @@ func TestLinkedList_Compare(t *testing.T) {
 	structList2.Poll()
 	assert.True(t, structList.Compare(&structList2))
 }
+
+func TestLinkedList_AddAll(t *testing.T) {
+	l1 := LinkedList[string]{}
+	l2 := LinkedList[string]{}
+	l1.Add("Hello")
+	l1.Add("World")
+	l2.Add("How")
+	l2.Add("Are")
+	l2.Add("You")
+	l1.AddAll(&l2)
+
+	assert.Equal(t, l1.Size(), 5)
+	assert.Equal(t, l1.Head().Data(), "Hello")
+	assert.Equal(t, l1.Head().Next().Data(), "World")
+	assert.Equal(t, l1.Head().Next().Next().Data(), "How")
+	assert.Equal(t, l1.Head().Next().Next().Next().Data(), "Are")
+	assert.Equal(t, l1.Head().Next().Next().Next().Next().Data(), "You")
+	assert.Nil(t, l1.Head().Next().Next().Next().Next().Next())
+
+}

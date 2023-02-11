@@ -189,3 +189,15 @@ func (L *LinkedList[T]) Compare(other *LinkedList[T]) bool {
 	}
 	return true
 }
+
+func (L *LinkedList[T]) AddAll(other *LinkedList[T]) {
+	head := other.Head()
+	for head != nil {
+		L.Add(head.data)
+		head = head.next
+	}
+}
+
+func (L *LinkedList[T]) Append(other *LinkedList[T]) {
+	L.tail.next = other.head
+}
