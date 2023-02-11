@@ -130,8 +130,8 @@ func (L *LinkedList[T]) Poll() T {
 }
 
 // Converts linked list to array
-func (L *LinkedList[T]) ToArray() []any {
-	i := make([]any, L.count)
+func (L *LinkedList[T]) ToArray() []T {
+	i := make([]T, L.count)
 	e := L.head
 	c := 0
 	for e != nil {
