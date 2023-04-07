@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/davidul/go-vic/graph/intgraph"
-	"github.com/davidul/go-vic/linkedlist"
+	linkedlist "github.com/davidul/go-vic/linkedlist"
 )
 
 func main() {
-	list := linkedlist.LinkedList{}
+	list := linkedlist.LinkedList[int]{}
 	list.Add(1)
 	list.Add(2)
 	list.Add(3)
@@ -47,4 +47,6 @@ func main() {
 	fmt.Printf("Bsf search for 2, found %d \n", bsf)
 	bsf = intGraph.Bsf(1, 3)
 	fmt.Printf("Bsf search for 3, found %d \n", bsf)
+
+	fmt.Println("\033[C \033[C Cursor right")
 }
