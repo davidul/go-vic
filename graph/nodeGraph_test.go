@@ -126,33 +126,33 @@ func addChildren(G *NodeGraph[string], parentNode *Node[string], parentDir strin
 	}
 }
 
-func TestX(t *testing.T) {
-	fmt.Println("\033[31m Hello Red")
-	fmt.Println("\033[S")
-	fmt.Println("\033[C Move right")
-}
+//func TestX(t *testing.T) {
+//	//fmt.Println("\033[31m Hello Red")
+//	fmt.Println("\033[S")
+//	fmt.Println("\033[C Move right")
+//}
 
-func TestFileSystem(t *testing.T) {
-	topDir := "/Users/david/godir-test"
-	dir, err := os.ReadDir(topDir)
-	if err != nil {
-		panic(err)
-	}
-
-	graph := NewGraph[string]()
-
-	parentNode := graph.Add(topDir)
-	for _, d := range dir {
-		if d.IsDir() {
-			next := graph.AddEdgeNodeValue(parentNode, filepath.Join(topDir, d.Name()))
-			addChildren(graph, next, filepath.Join(topDir, d.Name()), d)
-		} else {
-			graph.AddEdgeNodeValue(parentNode, filepath.Join(topDir, d.Name()))
-		}
-	}
-
-	graph.Print(parentNode)
-}
+//	func TestFileSystem(t *testing.T) {
+//		topDir := "/Users/david/godir-test"
+//		dir, err := os.ReadDir(topDir)
+//		if err != nil {
+//			panic(err)
+//		}
+//
+//		graph := NewGraph[string]()
+//
+//		parentNode := graph.Add(topDir)
+//		for _, d := range dir {
+//			if d.IsDir() {
+//				next := graph.AddEdgeNodeValue(parentNode, filepath.Join(topDir, d.Name()))
+//				addChildren(graph, next, filepath.Join(topDir, d.Name()), d)
+//			} else {
+//				graph.AddEdgeNodeValue(parentNode, filepath.Join(topDir, d.Name()))
+//			}
+//		}
+//
+//		graph.Print(parentNode)
+//	}
 func TestNodeGraph_Dsf(t *testing.T) {
 
 }
