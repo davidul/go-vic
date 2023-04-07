@@ -5,7 +5,7 @@ import (
 )
 
 type IntGraph struct {
-	m     map[int]linkedlist.LinkedList
+	m     map[int]linkedlist.LinkedList[int]
 	count int
 }
 
@@ -16,12 +16,12 @@ func NewIntGraph() *IntGraph {
 }
 
 func (G *IntGraph) initGraph() {
-	G.m = make(map[int]linkedlist.LinkedList)
+	G.m = make(map[int]linkedlist.LinkedList[int])
 }
 
 func (G *IntGraph) Add(value int) int {
 	G.count++
-	list := linkedlist.LinkedList{}
+	list := linkedlist.LinkedList[int]{}
 	list.Add(value)
 	G.m[G.count] = list
 	return G.count
@@ -31,13 +31,13 @@ func (G *IntGraph) AddEdge(start int, value int) int {
 	list := G.m[start]
 	G.count++
 	list.Add(value)
-	G.m[value] = linkedlist.LinkedList{}
+	G.m[value] = linkedlist.LinkedList[int]{}
 	return value
 }
 
 func (G *IntGraph) Bsf(root int, goal int) any {
-	visited := linkedlist.LinkedList{}
-	queue := linkedlist.LinkedList{}
+	visited := linkedlist.LinkedList[int]{}
+	queue := linkedlist.LinkedList[int]{}
 	queue.Add(root)
 	visited.Add(root)
 	for !queue.IsEmpty() {
@@ -45,7 +45,7 @@ func (G *IntGraph) Bsf(root int, goal int) any {
 		if v == goal {
 			return v
 		}
-		list := G.m[v.(int)]
+		list := G.m[v]
 		for e := list.Head(); e != nil; e = e.Next() {
 			if !visited.Contains(e.Data()) {
 				queue.Add(e.Data())
