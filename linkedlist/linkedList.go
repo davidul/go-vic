@@ -103,8 +103,13 @@ func (L *LinkedList[T]) Remove() T {
 func (L *LinkedList[T]) RemoveLast() T {
 	if L.tail != nil {
 		tail := L.tail
+		L.tail.prev.next = nil
 		L.tail = nil
 		return tail.data
+	} else if L.head != nil {
+		data := L.head.data
+		L.head = nil
+		return data
 	}
 	var result T
 	return result
