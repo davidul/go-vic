@@ -2,9 +2,14 @@ package bst
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
+//	   5
+//	4     6
+//
+// 3         7
 func TestBinarySearchTree_Add(t *testing.T) {
 	bst := NewBST[int]()
 	bst.Add(5, 5)
@@ -19,6 +24,10 @@ func TestBinarySearchTree_Add(t *testing.T) {
 	fmt.Println(height)
 }
 
+// 1
+//
+//	2
+//	  3
 func TestBinarySearchTree_Balance(t *testing.T) {
 	bst := NewBST[int]()
 	bst.Add(1, 1)
@@ -26,6 +35,6 @@ func TestBinarySearchTree_Balance(t *testing.T) {
 	bst.Add(3, 3)
 	h := Height{height: 0}
 	balanced, height := bst.isHeightBalanced(bst.root, h)
-	fmt.Println(balanced)
-	fmt.Println(height)
+	assert.Equal(t, balanced, false)
+	assert.Equal(t, height.height, 3)
 }
