@@ -116,7 +116,8 @@ func TestLinkedList_RemoveNode(t *testing.T) {
 	assert.Equal(t, head, t1)
 	assert.Equal(t, head.next, t2)
 	assert.Equal(t, head.next.next, t4)
-	assert.Nil(t, head.next.next.next)
+	//t1  t2   t4   tail -> nil
+	assert.Nil(t, head.next.next.next.next)
 
 }
 
@@ -184,6 +185,65 @@ func TestLinkedList_AddAll(t *testing.T) {
 	assert.Equal(t, l1.Head().Next().Next().Data(), "How")
 	assert.Equal(t, l1.Head().Next().Next().Next().Data(), "Are")
 	assert.Equal(t, l1.Head().Next().Next().Next().Next().Data(), "You")
-	assert.Nil(t, l1.Head().Next().Next().Next().Next().Next())
+	assert.Nil(t, l1.Head().Next().Next().Next().Next().Next().Next())
+}
 
+func TestLinkedList_Remove(t *testing.T) {
+	list := NewLinkedList[string]("A")
+	list.Add("X")
+	list.Add("Y")
+	r1 := list.Remove()
+	r2 := list.Remove()
+	r3 := list.Remove()
+	r4 := list.Remove()
+
+	assert.Equal(t, r1, "A")
+	assert.Equal(t, r2, "X")
+	assert.Equal(t, r3, "Y")
+	assert.Equal(t, r4, "")
+
+}
+
+func BenchmarkLinkedList_Add(b *testing.B) {
+	l := LinkedList[string]{}
+	for n := 0; n < b.N; n++ {
+		l.Add("hello")
+	}
+}
+
+func BenchmarkLinkedList_AddFirst(b *testing.B) {
+	l := LinkedList[string]{}
+	for n := 0; n < b.N; n++ {
+		l.AddFirst("hello")
+	}
+}
+
+func BenchmarkLinkedList_AddLast(b *testing.B) {
+	l := LinkedList[string]{}
+	for n := 0; n < b.N; n++ {
+		l.AddLast("hello")
+	}
+}
+
+func BenchmarkLinkedList_Append(b *testing.B) {
+	l := NewLinkedList[string]("Y")
+	for n := 0; n < b.N; n++ {
+		l1 := &LinkedList[string]{}
+		l1.Add("X")
+		l.Append(l1)
+	}
+}
+
+func BenchmarkLinkedList_Remove(b *testing.B) {
+	l := NewLinkedList[int](-1)
+	for i := 0; i < 1000_000; i++ {
+		l.Add(i)
+	}
+
+	b.ResetTimer()
+	var r = 0
+	for n := 0; n < b.N; n++ {
+		r = l.Remove()
+	}
+	r = r
 }

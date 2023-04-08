@@ -1,9 +1,5 @@
 package linkedlist
 
-import (
-	"fmt"
-)
-
 // LinkedList Simple linked list structure.
 // Pointer to head and tail of the list.
 // Count is the number of node.
@@ -18,6 +14,17 @@ type Node[T comparable] struct {
 	prev *Node[T]
 	//list *LinkedList
 	data T
+}
+
+func NewLinkedList[T comparable](data T) *LinkedList[T] {
+	l := LinkedList[T]{}
+	l.head = &Node[T]{}
+	l.head.data = data
+	l.tail = &Node[T]{}
+	l.tail.prev = l.head
+	l.head.next = l.tail
+	l.count = 1
+	return &l
 }
 
 func (n *Node[T]) Next() *Node[T] {
@@ -38,6 +45,7 @@ func (L *LinkedList[T]) Head() *Node[T] {
 }
 
 // Add append at the end of the list
+// H == T
 func (L *LinkedList[T]) Add(data T) *Node[T] {
 	node := &Node[T]{
 		next: nil,
@@ -45,11 +53,17 @@ func (L *LinkedList[T]) Add(data T) *Node[T] {
 		data: data}
 	if L.head == nil {
 		L.head = node
-		L.tail = node
+		L.tail = &Node[T]{}
+		L.tail.prev = L.head
+		L.head.next = L.tail
 	} else {
-		node.prev = L.tail
-		L.tail.next = node
-		L.tail = L.tail.next
+
+		// A N -> T
+		a := L.tail.prev
+		node.next = L.tail
+		node.prev = L.tail.prev
+		L.tail.prev = node
+		a.next = node
 	}
 	L.count++
 	return node
@@ -92,11 +106,25 @@ func (L *LinkedList[T]) PeekLast() T {
 
 // Remove retrieves and removes the head
 func (L *LinkedList[T]) Remove() T {
-	head := L.head
-	newHead := head.next
-	L.head = newHead
-	L.count--
-	return head.data
+	//head -> tail
+	if L.count == 0 {
+		var result T
+		return result
+	}
+	if L.head.next.next == nil {
+		data := L.head.data
+		L.count--
+		return data
+	} else {
+		data := L.head.data
+		head := L.head
+		newHead := head.next
+		L.head = newHead
+		L.head.prev = nil
+		L.count--
+		head = nil
+		return data
+	}
 }
 
 // RemoveLast remove and return tail of the list
@@ -174,7 +202,7 @@ func (L *LinkedList[T]) Size() int {
 func (L *LinkedList[T]) Print() {
 	list := L.head
 	for list != nil {
-		fmt.Println(list.data)
+		//fmt.Println(list.data)
 		list = list.next
 	}
 }
@@ -196,11 +224,19 @@ func (L *LinkedList[T]) Compare(other *LinkedList[T]) bool {
 }
 
 func (L *LinkedList[T]) AddAll(other *LinkedList[T]) {
+	if other == nil {
+		return
+	}
+
+	if other.head == nil {
+		return
+	}
 	head := other.Head()
-	for head != nil {
+	for head.next != nil {
 		L.Add(head.data)
 		head = head.next
 	}
+
 }
 
 func (L *LinkedList[T]) Append(other *LinkedList[T]) {
