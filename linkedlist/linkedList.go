@@ -20,6 +20,21 @@ type Node[T comparable] struct {
 	data T
 }
 
+func NewLinkedList[T comparable](data T) *LinkedList[T] {
+	head := &Node[T]{
+		data: data,
+		next: nil,
+		prev: nil,
+	}
+	tail := head
+
+	return &LinkedList[T]{
+		head:  head,
+		tail:  tail,
+		count: 1,
+	}
+}
+
 func (n *Node[T]) Next() *Node[T] {
 	if n.next != nil {
 		return n.next
@@ -92,25 +107,45 @@ func (L *LinkedList[T]) PeekLast() T {
 
 // Remove retrieves and removes the head
 func (L *LinkedList[T]) Remove() T {
+	if L.count == 0 {
+		var result T
+		return result
+	}
 	head := L.head
 	newHead := head.next
+	if newHead == nil {
+		L.count--
+		return head.data
+	}
 	L.head = newHead
+	L.head.prev = nil
 	L.count--
 	return head.data
 }
 
 // RemoveLast remove and return tail of the list
 func (L *LinkedList[T]) RemoveLast() T {
+	if L.count == 0 {
+		var result T
+		return result
+	}
+	if L.head == L.tail {
+		L.count--
+		return L.head.data
+	}
 	if L.tail != nil {
 		tail := L.tail
 		L.tail.prev.next = nil
-		L.tail = nil
+		L.tail = tail.prev
+		L.count--
 		return tail.data
 	} else if L.head != nil {
 		data := L.head.data
 		L.head = nil
+		L.count--
 		return data
 	}
+
 	var result T
 	return result
 }
@@ -157,7 +192,7 @@ func (L *LinkedList[T]) Contains(v T) bool {
 }
 
 func (L *LinkedList[T]) IsEmpty() bool {
-	if L.head == nil {
+	if L.count == 0 {
 		return true
 	}
 	return false
@@ -204,5 +239,12 @@ func (L *LinkedList[T]) AddAll(other *LinkedList[T]) {
 }
 
 func (L *LinkedList[T]) Append(other *LinkedList[T]) {
-	L.tail.next = other.head
+	if L.tail == L.head {
+		L.head.next = other.head
+		other.head.prev = L.head
+		L.tail = other.tail
+		L.count += other.count
+	} else {
+		L.tail.next = other.head
+	}
 }

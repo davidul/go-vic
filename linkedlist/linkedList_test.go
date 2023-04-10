@@ -26,9 +26,16 @@ func TestLinkedList_Add(t *testing.T) {
 	if size != 2 {
 		t.Fatal("Wrong number of elements")
 	}
-
 }
 
+func TestLinkedList_AddNew(t *testing.T) {
+	list := NewLinkedList("A")
+	n1 := list.Add("B")
+	n2 := list.Add("C")
+	assert.Equal(t, list.count, 3)
+	assert.Equal(t, n1.data, "B")
+	assert.Equal(t, n2.data, "C")
+}
 func TestLinkedList_AddFirst(t *testing.T) {
 	list := LinkedList[int]{}
 	list.AddFirst(1)
@@ -185,5 +192,121 @@ func TestLinkedList_AddAll(t *testing.T) {
 	assert.Equal(t, l1.Head().Next().Next().Next().Data(), "Are")
 	assert.Equal(t, l1.Head().Next().Next().Next().Next().Data(), "You")
 	assert.Nil(t, l1.Head().Next().Next().Next().Next().Next())
+}
 
+func TestLinkedList_Remove(t *testing.T) {
+	list := NewLinkedList[string]("A")
+	list.Add("B")
+	list.Add("C")
+	r1 := list.Remove()
+	r2 := list.Remove()
+	r3 := list.Remove()
+	r4 := list.Remove()
+	r5 := list.Remove()
+
+	assert.Equal(t, r1, "A")
+	assert.Equal(t, r2, "B")
+	assert.Equal(t, r3, "C")
+	assert.Equal(t, r4, "")
+	assert.Equal(t, r5, "")
+}
+
+func TestLinkedList_RemoveLast(t *testing.T) {
+	list := NewLinkedList[string]("A")
+	list.Add("B")
+	list.Add("C")
+	r1 := list.RemoveLast()
+	r2 := list.RemoveLast()
+	r3 := list.RemoveLast()
+	r4 := list.RemoveLast()
+
+	assert.Equal(t, "C", r1)
+	assert.Equal(t, "B", r2)
+	assert.Equal(t, "A", r3)
+	assert.Equal(t, "", r4)
+}
+
+func TestLinkedList_Poll(t *testing.T) {
+	list := NewLinkedList[string]("A")
+	list.Add("B")
+	list.Add("C")
+	list.Add("D")
+
+	p1 := list.Poll()
+	p2 := list.Poll()
+	p3 := list.Poll()
+	p4 := list.Poll()
+
+	assert.Equal(t, "A", p1)
+	assert.Equal(t, "B", p2)
+	assert.Equal(t, "C", p3)
+	assert.Equal(t, "D", p4)
+}
+
+func TestLinkedList_Append(t *testing.T) {
+	l1 := NewLinkedList[string]("A")
+	l2 := NewLinkedList[string]("B")
+	l1.Append(l2)
+	p1 := l1.Poll()
+	p2 := l1.Poll()
+	assert.Equal(t, "A", p1)
+	assert.Equal(t, "B", p2)
+
+	l3 := NewLinkedList[string]("C")
+	l3.Add("D")
+	l3.Append(l2)
+	l1.Append(l3)
+
+	p3 := l3.Poll()
+	p4 := l3.Poll()
+	p5 := l3.Poll()
+
+	assert.Equal(t, "C", p3)
+	assert.Equal(t, "D", p4)
+	assert.Equal(t, "", p5)
+
+}
+
+func BenchmarkLinkedList_Add(b *testing.B) {
+	l := LinkedList[string]{}
+	for n := 0; n < b.N; n++ {
+		l.Add("hello")
+	}
+}
+
+func BenchmarkLinkedList_AddFirst(b *testing.B) {
+	l := LinkedList[string]{}
+	for n := 0; n < b.N; n++ {
+		l.AddFirst("hello")
+	}
+}
+
+func BenchmarkLinkedList_AddLast(b *testing.B) {
+	l := LinkedList[string]{}
+	for n := 0; n < b.N; n++ {
+		l.AddLast("hello")
+	}
+}
+
+func BenchmarkLinkedList_Append(b *testing.B) {
+	l := NewLinkedList[string]("Y")
+	for n := 0; n < b.N; n++ {
+		l1 := &LinkedList[string]{}
+		l1.Add("X")
+		l.Append(l1)
+	}
+}
+
+func BenchmarkLinkedList_Remove(b *testing.B) {
+	l := NewLinkedList[int](-1)
+	for i := 0; i < 1_000_000_0; i++ {
+		l.Add(i)
+	}
+
+	b.ResetTimer()
+	var r = 0
+	for n := 0; n < b.N; n++ {
+		r = l.Remove()
+	}
+	r = r
 }
