@@ -278,6 +278,8 @@ func (L *LLIterator[T]) Next() T {
 	return data
 }
 
+// Done returns true if there
+// are no more elements
 func (L *LLIterator[T]) Done() bool {
 	if L.next == nil {
 		return true
