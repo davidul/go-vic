@@ -4,22 +4,30 @@ import (
 	"fmt"
 )
 
-// LinkedList Simple linked list structure.
+// LinkedList Double linked list structure.
 // Pointer to head and tail of the list.
-// Count is the number of node.
+// Count is the number of nodes.
 type LinkedList[T comparable] struct {
 	head  *Node[T]
 	tail  *Node[T]
 	count int
 }
 
+// Node has pointers to next and previous nodes.
+// Can iterate in forward or backward direction.
 type Node[T comparable] struct {
 	next *Node[T]
 	prev *Node[T]
-	//list *LinkedList
 	data T
 }
 
+type LinkedListIterator[T comparable] interface {
+	Next() T
+	Done() bool
+}
+
+// NewLinkedList creates new linked list with data T.
+// Head and tail are the same.
 func NewLinkedList[T comparable](data T) *LinkedList[T] {
 	head := &Node[T]{
 		data: data,
@@ -35,6 +43,8 @@ func NewLinkedList[T comparable](data T) *LinkedList[T] {
 	}
 }
 
+// Next returns next node. If the next
+// pointer is nil returns nil
 func (n *Node[T]) Next() *Node[T] {
 	if n.next != nil {
 		return n.next
@@ -42,12 +52,12 @@ func (n *Node[T]) Next() *Node[T] {
 	return nil
 }
 
-// Data Node data
+// Data returns Node data
 func (n *Node[T]) Data() T {
 	return n.data
 }
 
-// Head return head of the list
+// Head returns head of the list
 func (L *LinkedList[T]) Head() *Node[T] {
 	return L.head
 }
@@ -191,6 +201,7 @@ func (L *LinkedList[T]) Contains(v T) bool {
 	return false
 }
 
+// IsEmpty returns true if the list is empty
 func (L *LinkedList[T]) IsEmpty() bool {
 	if L.count == 0 {
 		return true
@@ -202,6 +213,7 @@ func (L *LinkedList[T]) IsEmpty() bool {
 //
 //}
 
+// Size return size of the linkedlist
 func (L *LinkedList[T]) Size() int {
 	return L.count
 }
@@ -247,4 +259,29 @@ func (L *LinkedList[T]) Append(other *LinkedList[T]) {
 	} else {
 		L.tail.next = other.head
 	}
+}
+
+type LLIterator[T comparable] struct {
+	l    *LinkedList[T]
+	next *Node[T]
+}
+
+func (L *LinkedList[T]) CreateIterator() *LLIterator[T] {
+	return &LLIterator[T]{
+		l:    L,
+		next: L.head,
+	}
+}
+func (L *LLIterator[T]) Next() T {
+	data := L.next.data
+	L.next = L.next.next
+	return data
+}
+
+func (L *LLIterator[T]) Done() bool {
+	if L.next == nil {
+		return true
+	}
+
+	return false
 }

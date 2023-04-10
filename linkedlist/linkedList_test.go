@@ -264,7 +264,18 @@ func TestLinkedList_Append(t *testing.T) {
 	assert.Equal(t, "C", p3)
 	assert.Equal(t, "D", p4)
 	assert.Equal(t, "", p5)
+}
 
+func TestLinkedList_CreateIterator(t *testing.T) {
+	l := NewLinkedList("A")
+	l.Add("B")
+	l.Add("C")
+
+	it := l.CreateIterator()
+	assert.Equal(t, "A", it.Next())
+	assert.Equal(t, "B", it.Next())
+	assert.Equal(t, "C", it.Next())
+	assert.True(t, it.Done())
 }
 
 func BenchmarkLinkedList_Add(b *testing.B) {
