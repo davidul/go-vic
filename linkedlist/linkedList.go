@@ -160,7 +160,7 @@ func (L *LinkedList[T]) RemoveLast() T {
 	return result
 }
 
-// Remove node by reference to the node
+// RemoveNode by reference to the node
 func (L *LinkedList[T]) RemoveNode(node *Node[T]) {
 	for e := L.head; e != nil; e = e.Next() {
 		if e == node {

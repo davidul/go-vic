@@ -86,11 +86,16 @@ func (R *Tree[T]) postOrder(nodes *linkedlist.LinkedList[TreeNode[T]]) {
 	}
 }
 
+// PreOrder - PreOrder traversal of the tree
 func (R *Tree[T]) PreOrder() {
 	fmt.Println(R.root.Value)
 	R.preOrder(R.root.Children, 1, math.MaxInt)
 }
 
+// preOrder - PreOrder traversal of the tree
+// nodes - list of nodes
+// lvl - current level
+// stopLvl - stop at this level
 func (R *Tree[T]) preOrder(nodes *linkedlist.LinkedList[TreeNode[T]], lvl int, stopLvl int) {
 	lvl += 1
 	if stopLvl <= lvl {
