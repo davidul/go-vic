@@ -9,6 +9,8 @@ type LinkedList[T comparable] struct {
 	count int
 }
 
+// Node of the linked list
+// Next and previous node.
 type Node[T comparable] struct {
 	next *Node[T]
 	prev *Node[T]
@@ -16,6 +18,9 @@ type Node[T comparable] struct {
 	data T
 }
 
+// NewLinkedList create a new linked list with data
+// head.next -> tail
+// head <- tail.prev
 func NewLinkedList[T comparable](data T) *LinkedList[T] {
 	l := LinkedList[T]{}
 	l.head = &Node[T]{}
