@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	list := linkedlist.LinkedList[int]{}
+	list := linkedlist.DoublyLinkedList[int]{}
 	list.Add(1)
 	list.Add(2)
 	list.Add(3)

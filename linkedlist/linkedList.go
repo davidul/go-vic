@@ -1,9 +1,9 @@
 package linkedlist
 
-// LinkedList Simple linked list structure.
+// DoublyLinkedList Simple linked list structure.
 // Pointer to head and tail of the list.
 // Count is the number of node.
-type LinkedList[T comparable] struct {
+type DoublyLinkedList[T comparable] struct {
 	head  *Node[T]
 	tail  *Node[T]
 	count int
@@ -14,21 +14,26 @@ type LinkedList[T comparable] struct {
 type Node[T comparable] struct {
 	next *Node[T]
 	prev *Node[T]
-	//list *LinkedList
+	//list *DoublyLinkedList
 	data T
 }
 
-// NewLinkedList create a new linked list with data
+func EmptyDoublyLinkedList[T comparable]() *DoublyLinkedList[T] {
+	return &DoublyLinkedList[T]{
+		head:  nil,
+		tail:  nil,
+		count: 0,
+	}
+}
+
+// NewDoublyLinkedList create a new linked list with data
 // head.next -> tail
 // head <- tail.prev
-func NewLinkedList[T comparable](data T) *LinkedList[T] {
-	l := LinkedList[T]{}
-	l.head = &Node[T]{}
-	l.head.data = data
-	l.tail = &Node[T]{}
-	l.tail.prev = l.head
-	l.head.next = l.tail
-	l.count = 1
+func NewDoublyLinkedList[T comparable](data T) *DoublyLinkedList[T] {
+	l := DoublyLinkedList[T]{}
+	n := Node[T]{}
+	l.head = &n
+	l.tail = &n
 	return &l
 }
 
@@ -45,53 +50,57 @@ func (n *Node[T]) Data() T {
 }
 
 // Head return head of the list
-func (L *LinkedList[T]) Head() *Node[T] {
+func (L *DoublyLinkedList[T]) Head() *Node[T] {
 	return L.head
 }
 
 // Add append at the end of the list
 // H == T
-func (L *LinkedList[T]) Add(data T) *Node[T] {
-	node := &Node[T]{
+// head -> tail
+func (L *DoublyLinkedList[T]) Add(data T) *Node[T] {
+	newNode := &Node[T]{
 		next: nil,
 		prev: nil,
 		data: data}
+
 	if L.head == nil {
-		L.head = node
-		L.tail = &Node[T]{}
-		L.tail.prev = L.head
-		L.head.next = L.tail
+		L.head = newNode
+		L.tail = newNode
 	} else {
 
 		// A N -> T
-		a := L.tail.prev
-		node.next = L.tail
-		node.prev = L.tail.prev
-		L.tail.prev = node
-		a.next = node
+		newNode.prev = L.tail
+		L.tail.next = newNode
+		L.tail = newNode
 	}
 	L.count++
-	return node
+	return newNode
 }
 
 // AddLast append to tail
-func (L *LinkedList[T]) AddLast(data T) {
+func (L *DoublyLinkedList[T]) AddLast(data T) {
 	L.Add(data)
 }
 
 // AddFirst prepend to head. New head is being created.
-func (L *LinkedList[T]) AddFirst(data T) {
-	oldHead := L.head
-	list := &Node[T]{
-		next: oldHead,
+func (L *DoublyLinkedList[T]) AddFirst(data T) {
+	newNode := &Node[T]{
 		data: data,
 	}
-	L.head = list
+
+	if L.head == nil {
+		L.head = newNode
+		L.tail = newNode
+	} else {
+		newNode.next = L.head
+		L.head.prev = newNode
+		L.head = newNode
+	}
 	L.count++
 }
 
 // Peek returns but does not remove the head element
-func (L *LinkedList[T]) Peek() any {
+func (L *DoublyLinkedList[T]) Peek() any {
 	if L.head != nil {
 		return L.head.data
 	} else {
@@ -100,7 +109,7 @@ func (L *LinkedList[T]) Peek() any {
 }
 
 // PeekLast returns but does not remove the tail element
-func (L *LinkedList[T]) PeekLast() T {
+func (L *DoublyLinkedList[T]) PeekLast() T {
 	if L.tail != nil {
 		return L.tail.data
 	} else {
@@ -110,46 +119,46 @@ func (L *LinkedList[T]) PeekLast() T {
 }
 
 // Remove retrieves and removes the head
-func (L *LinkedList[T]) Remove() T {
+func (L *DoublyLinkedList[T]) Remove() T {
 	//head -> tail
-	if L.count == 0 {
+
+	if L.head == nil {
 		var result T
 		return result
 	}
-	if L.head.next.next == nil {
-		data := L.head.data
-		L.count--
-		return data
+
+	data := L.head.data
+	L.head = L.head.next
+	if L.head == nil {
+		L.tail = nil
 	} else {
-		data := L.head.data
-		head := L.head
-		newHead := head.next
-		L.head = newHead
 		L.head.prev = nil
-		L.count--
-		head = nil
-		return data
 	}
+	L.count--
+	return data
 }
 
 // RemoveLast remove and return tail of the list
-func (L *LinkedList[T]) RemoveLast() T {
-	if L.tail != nil {
-		tail := L.tail
-		L.tail.prev.next = nil
-		L.tail = nil
-		return tail.data
-	} else if L.head != nil {
-		data := L.head.data
-		L.head = nil
-		return data
+func (L *DoublyLinkedList[T]) RemoveLast() T {
+	if L.tail == nil {
+		var zero T
+		return zero
 	}
-	var result T
-	return result
+
+	data := L.tail.data
+	L.tail = L.tail.prev
+	if L.tail == nil {
+		L.head = nil
+	} else {
+		L.tail.next = nil
+	}
+	L.count--
+
+	return data
 }
 
 // Remove node by reference to the node
-func (L *LinkedList[T]) RemoveNode(node *Node[T]) {
+func (L *DoublyLinkedList[T]) RemoveNode(node *Node[T]) {
 	for e := L.head; e != nil; e = e.Next() {
 		if e == node {
 			prev := e.prev
@@ -163,12 +172,12 @@ func (L *LinkedList[T]) RemoveNode(node *Node[T]) {
 }
 
 // Poll remove and return
-func (L *LinkedList[T]) Poll() T {
+func (L *DoublyLinkedList[T]) Poll() T {
 	return L.Remove()
 }
 
 // Converts linked list to array
-func (L *LinkedList[T]) ToArray() []T {
+func (L *DoublyLinkedList[T]) ToArray() []T {
 	i := make([]T, L.count)
 	e := L.head
 	c := 0
@@ -180,7 +189,7 @@ func (L *LinkedList[T]) ToArray() []T {
 	return i
 }
 
-func (L *LinkedList[T]) Contains(v T) bool {
+func (L *DoublyLinkedList[T]) Contains(v T) bool {
 	for e := L.head; e != nil; e = e.Next() {
 		if e.Data() == v {
 			return true
@@ -189,22 +198,22 @@ func (L *LinkedList[T]) Contains(v T) bool {
 	return false
 }
 
-func (L *LinkedList[T]) IsEmpty() bool {
+func (L *DoublyLinkedList[T]) IsEmpty() bool {
 	if L.head == nil {
 		return true
 	}
 	return false
 }
 
-//func (L LinkedList) Reverse() LinkedList {
+//func (L DoublyLinkedList) Reverse() DoublyLinkedList {
 //
 //}
 
-func (L *LinkedList[T]) Size() int {
+func (L *DoublyLinkedList[T]) Size() int {
 	return L.count
 }
 
-func (L *LinkedList[T]) Print() {
+func (L *DoublyLinkedList[T]) Print() {
 	list := L.head
 	for list != nil {
 		//fmt.Println(list.data)
@@ -212,7 +221,7 @@ func (L *LinkedList[T]) Print() {
 	}
 }
 
-func (L *LinkedList[T]) Compare(other *LinkedList[T]) bool {
+func (L *DoublyLinkedList[T]) Compare(other *DoublyLinkedList[T]) bool {
 	if L.Size() == other.Size() {
 		oe := other.Head()
 		for e := L.head; e != nil; e = e.next {
@@ -228,7 +237,7 @@ func (L *LinkedList[T]) Compare(other *LinkedList[T]) bool {
 	return true
 }
 
-func (L *LinkedList[T]) AddAll(other *LinkedList[T]) {
+func (L *DoublyLinkedList[T]) AddAll(other *DoublyLinkedList[T]) {
 	if other == nil {
 		return
 	}
@@ -244,6 +253,6 @@ func (L *LinkedList[T]) AddAll(other *LinkedList[T]) {
 
 }
 
-func (L *LinkedList[T]) Append(other *LinkedList[T]) {
+func (L *DoublyLinkedList[T]) Append(other *DoublyLinkedList[T]) {
 	L.tail.next = other.head
 }

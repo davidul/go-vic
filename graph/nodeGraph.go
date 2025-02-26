@@ -9,7 +9,7 @@ import (
 // *Node is a key
 // You can have duplicate in value
 type NodeGraph[T comparable] struct {
-	m     map[*Node[T]]*linkedlist.LinkedList[*Node[T]]
+	m     map[*Node[T]]*linkedlist.DoublyLinkedList[*Node[T]]
 	count int
 }
 
@@ -31,7 +31,7 @@ func NewGraph[T comparable]() *NodeGraph[T] {
 }
 
 func (G *NodeGraph[T]) init() {
-	G.m = make(map[*Node[T]]*linkedlist.LinkedList[*Node[T]])
+	G.m = make(map[*Node[T]]*linkedlist.DoublyLinkedList[*Node[T]])
 }
 
 // Add value to a graph and return it as *Node
@@ -47,7 +47,7 @@ func (G *NodeGraph[T]) Add(value T) *Node[T] {
 		}
 	}
 	G.count++
-	list := &linkedlist.LinkedList[*Node[T]]{}
+	list := &linkedlist.DoublyLinkedList[*Node[T]]{}
 	node := &Node[T]{Value: value}
 	G.m[node] = list
 	return node
@@ -70,7 +70,7 @@ func (G *NodeGraph[T]) AddEdge(start *Node[T], end *Node[T]) {
 
 	if e1 && !e2 {
 		l1.Add(end)
-		list := linkedlist.LinkedList[*Node[T]]{}
+		list := linkedlist.DoublyLinkedList[*Node[T]]{}
 		list.Add(start)
 		G.m[end] = &list
 		return
@@ -78,15 +78,15 @@ func (G *NodeGraph[T]) AddEdge(start *Node[T], end *Node[T]) {
 
 	if !e1 && e2 {
 		l2.Add(start)
-		list := linkedlist.LinkedList[*Node[T]]{}
+		list := linkedlist.DoublyLinkedList[*Node[T]]{}
 		list.Add(end)
 		G.m[start] = &list
 		return
 	}
 
 	if !e1 && !e2 {
-		list1 := linkedlist.LinkedList[*Node[T]]{}
-		list2 := linkedlist.LinkedList[*Node[T]]{}
+		list1 := linkedlist.DoublyLinkedList[*Node[T]]{}
+		list2 := linkedlist.DoublyLinkedList[*Node[T]]{}
 		list1.Add(end)
 		list2.Add(start)
 		G.m[start] = &list1
@@ -110,14 +110,14 @@ func (G *NodeGraph[T]) AddEdgeNodeValue(start *Node[T], end T) *Node[T] {
 	n.Value = end
 	list := G.m[start]
 	list.Add(n)
-	G.m[n] = new(linkedlist.LinkedList[*Node[T]])
+	G.m[n] = new(linkedlist.DoublyLinkedList[*Node[T]])
 	return n
 }
 
 // Bsf Breadth First Search
 func (G *NodeGraph[T]) Bsf(root *Node[T], goal T) *Node[T] {
-	visited := linkedlist.LinkedList[*Node[T]]{}
-	queue := linkedlist.LinkedList[*Node[T]]{}
+	visited := linkedlist.DoublyLinkedList[*Node[T]]{}
+	queue := linkedlist.DoublyLinkedList[*Node[T]]{}
 	queue.Add(root)
 
 	for !queue.IsEmpty() {
@@ -143,8 +143,8 @@ func (G *NodeGraph[T]) Bsf(root *Node[T], goal T) *Node[T] {
 // any node on the path
 func (G *NodeGraph[T]) ShortestPath(root *Node[T], goal T) map[*Node[T]]Distance[T] {
 
-	visited := linkedlist.LinkedList[*Node[T]]{}
-	queue := linkedlist.LinkedList[*Node[T]]{}
+	visited := linkedlist.DoublyLinkedList[*Node[T]]{}
+	queue := linkedlist.DoublyLinkedList[*Node[T]]{}
 	queue.Add(root)
 
 	distanceMap := make(map[*Node[T]]Distance[T])
@@ -190,8 +190,8 @@ func (G *NodeGraph[T]) ShortestPath(root *Node[T], goal T) map[*Node[T]]Distance
 
 // Dsf Depth first search
 func (G *NodeGraph[T]) Dsf(root *Node[T], goal T) T {
-	stack := linkedlist.LinkedList[*Node[T]]{}
-	visited := linkedlist.LinkedList[*Node[T]]{}
+	stack := linkedlist.DoublyLinkedList[*Node[T]]{}
+	visited := linkedlist.DoublyLinkedList[*Node[T]]{}
 
 	stack.AddFirst(root)
 
@@ -222,8 +222,8 @@ func (G *NodeGraph[T]) SimpleDelete(node *Node[T]) {
 }
 
 func (G *NodeGraph[T]) Print(node *Node[T]) {
-	visited := linkedlist.LinkedList[*Node[T]]{}
-	queue := linkedlist.LinkedList[*Node[T]]{}
+	visited := linkedlist.DoublyLinkedList[*Node[T]]{}
+	queue := linkedlist.DoublyLinkedList[*Node[T]]{}
 	queue.Add(node)
 
 	for !queue.IsEmpty() {
