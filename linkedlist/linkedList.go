@@ -238,18 +238,21 @@ func (L *DoublyLinkedList[T]) Compare(other *DoublyLinkedList[T]) bool {
 }
 
 func (L *DoublyLinkedList[T]) AddAll(other *DoublyLinkedList[T]) {
-	if other == nil {
+	if other == nil || other.head == nil {
 		return
 	}
 
-	if other.head == nil {
+	if L.head == nil {
+		L.head = other.head
+		L.tail = other.tail
+		L.count = other.count
 		return
 	}
-	head := other.Head()
-	for head.next != nil {
-		L.Add(head.data)
-		head = head.next
-	}
+
+	L.tail.next = other.head
+	other.head.prev = L.tail
+	L.tail = other.tail
+	L.count += other.count
 
 }
 

@@ -185,7 +185,7 @@ func TestLinkedList_AddAll(t *testing.T) {
 	assert.Equal(t, l1.Head().Next().Next().Data(), "How")
 	assert.Equal(t, l1.Head().Next().Next().Next().Data(), "Are")
 	assert.Equal(t, l1.Head().Next().Next().Next().Next().Data(), "You")
-	assert.Nil(t, l1.Head().Next().Next().Next().Next().Next().Next())
+	assert.Nil(t, l1.Head().Next().Next().Next().Next().Next())
 }
 
 func TestLinkedList_Remove(t *testing.T) {
