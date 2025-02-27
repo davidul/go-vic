@@ -8,19 +8,19 @@ type WNode[T comparable] struct {
 }
 
 type WNodeGraph[T comparable] struct {
-	m map[*Node[T]]linkedlist.LinkedList[*WNode[T]]
+	m map[*Node[T]]linkedlist.DoublyLinkedList[*WNode[T]]
 }
 
 func NewWGraph[T comparable]() *WNodeGraph[T] {
 	w := new(WNodeGraph[T])
-	w.m = make(map[*Node[T]]linkedlist.LinkedList[*WNode[T]])
+	w.m = make(map[*Node[T]]linkedlist.DoublyLinkedList[*WNode[T]])
 	return w
 }
 
 func (G *WNodeGraph[T]) Add(value T) *Node[T] {
 	n := new(Node[T])
 	n.Value = value
-	G.m[n] = linkedlist.LinkedList[*WNode[T]]{}
+	G.m[n] = linkedlist.DoublyLinkedList[*WNode[T]]{}
 	return n
 }
 
