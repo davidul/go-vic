@@ -15,6 +15,10 @@ type AVLNode struct {
 	parent *AVLNode
 }
 
+type Key struct {
+	cmp func() int
+}
+
 func NewEmptyAVLTree() *AVLTree {
 	tree := new(AVLTree)
 	return tree
@@ -113,10 +117,6 @@ func (A *AVLTree) leftRotate(x *AVLNode) *AVLNode {
 	y.height = max(height(y.left), height(y.right)) + 1
 
 	return y
-}
-
-func (A *AVLTree) height() {
-
 }
 
 func max(a int, b int) int {
