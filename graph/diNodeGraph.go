@@ -3,7 +3,7 @@ package graph
 import "github.com/davidul/go-vic/linkedlist"
 
 type DiNodeGraph[T comparable] struct {
-	m     map[*Node[T]]*linkedlist.LinkedList[*Node[T]]
+	m     map[*Node[T]]*linkedlist.DoublyLinkedList[*Node[T]]
 	count int
 }
 
@@ -14,7 +14,7 @@ func NewDiGraph[T comparable]() *DiNodeGraph[T] {
 }
 
 func (G *DiNodeGraph[T]) init() {
-	G.m = make(map[*Node[T]]*linkedlist.LinkedList[*Node[T]])
+	G.m = make(map[*Node[T]]*linkedlist.DoublyLinkedList[*Node[T]])
 }
 
 func (G *DiNodeGraph[T]) Add(value T) *Node[T] {
@@ -27,7 +27,7 @@ func (G *DiNodeGraph[T]) Add(value T) *Node[T] {
 		//}
 	}
 	G.count++
-	list := &linkedlist.LinkedList[*Node[T]]{}
+	list := &linkedlist.DoublyLinkedList[*Node[T]]{}
 	node := &Node[T]{Value: value}
 	G.m[node] = list
 	return node

@@ -3,11 +3,11 @@ package stack
 import "github.com/davidul/go-vic/linkedlist"
 
 type Stack[T comparable] struct {
-	l linkedlist.LinkedList[T]
+	l linkedlist.DoublyLinkedList[T]
 }
 
 func NewStack[T comparable]() *Stack[T] {
-	lst := linkedlist.LinkedList[T]{}
+	lst := linkedlist.DoublyLinkedList[T]{}
 	return &Stack[T]{l: lst}
 }
 

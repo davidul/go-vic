@@ -5,7 +5,7 @@ import (
 )
 
 type IntGraph struct {
-	m     map[int]linkedlist.LinkedList[int]
+	m     map[int]linkedlist.DoublyLinkedList[int]
 	count int
 }
 
@@ -16,12 +16,12 @@ func NewIntGraph() *IntGraph {
 }
 
 func (G *IntGraph) initGraph() {
-	G.m = make(map[int]linkedlist.LinkedList[int])
+	G.m = make(map[int]linkedlist.DoublyLinkedList[int])
 }
 
 func (G *IntGraph) Add(value int) int {
 	G.count++
-	list := linkedlist.LinkedList[int]{}
+	list := linkedlist.DoublyLinkedList[int]{}
 	list.Add(value)
 	G.m[G.count] = list
 	return G.count
@@ -31,13 +31,13 @@ func (G *IntGraph) AddEdge(start int, value int) int {
 	list := G.m[start]
 	G.count++
 	list.Add(value)
-	G.m[value] = linkedlist.LinkedList[int]{}
+	G.m[value] = linkedlist.DoublyLinkedList[int]{}
 	return value
 }
 
 func (G *IntGraph) Bsf(root int, goal int) any {
-	visited := linkedlist.LinkedList[int]{}
-	queue := linkedlist.LinkedList[int]{}
+	visited := linkedlist.DoublyLinkedList[int]{}
+	queue := linkedlist.DoublyLinkedList[int]{}
 	queue.Add(root)
 	visited.Add(root)
 	for !queue.IsEmpty() {

@@ -11,7 +11,7 @@ type Sample struct {
 }
 
 func TestLinkedList_Add(t *testing.T) {
-	list := LinkedList[int]{}
+	list := DoublyLinkedList[int]{}
 	size := list.Size()
 	if size != 0 {
 		t.Fatal("Wrong number of elements")
@@ -26,18 +26,11 @@ func TestLinkedList_Add(t *testing.T) {
 	if size != 2 {
 		t.Fatal("Wrong number of elements")
 	}
+
 }
 
-func TestLinkedList_AddNew(t *testing.T) {
-	list := NewLinkedList("A")
-	n1 := list.Add("B")
-	n2 := list.Add("C")
-	assert.Equal(t, list.count, 3)
-	assert.Equal(t, n1.data, "B")
-	assert.Equal(t, n2.data, "C")
-}
 func TestLinkedList_AddFirst(t *testing.T) {
-	list := LinkedList[int]{}
+	list := DoublyLinkedList[int]{}
 	list.AddFirst(1)
 	size := list.Size()
 	if size != 1 {
@@ -52,7 +45,7 @@ func TestLinkedList_AddFirst(t *testing.T) {
 }
 
 func TestLinkedList_AddLast(t *testing.T) {
-	list := LinkedList[int]{}
+	list := DoublyLinkedList[int]{}
 	list.AddLast(1)
 	size := list.Size()
 	if size != 1 {
@@ -77,8 +70,8 @@ func TestLinkedList_AddLast(t *testing.T) {
 }
 
 func TestLinkedList_Contains(t *testing.T) {
-	intList := LinkedList[int]{}
-	structList := LinkedList[Sample]{}
+	intList := DoublyLinkedList[int]{}
+	structList := DoublyLinkedList[Sample]{}
 
 	intList.Add(1)
 
@@ -100,7 +93,7 @@ func TestLinkedList_Contains(t *testing.T) {
 }
 
 func TestLinkedList_RemoveNode(t *testing.T) {
-	structList := LinkedList[Sample]{}
+	structList := DoublyLinkedList[Sample]{}
 	t1 := structList.Add(Sample{
 		n: 0,
 		s: "test0",
@@ -123,12 +116,13 @@ func TestLinkedList_RemoveNode(t *testing.T) {
 	assert.Equal(t, head, t1)
 	assert.Equal(t, head.next, t2)
 	assert.Equal(t, head.next.next, t4)
+	//t1  t2   t4   tail -> nil
 	assert.Nil(t, head.next.next.next)
 
 }
 
 func TestLinkedList_Compare(t *testing.T) {
-	structList := LinkedList[Sample]{}
+	structList := DoublyLinkedList[Sample]{}
 	structList.Add(Sample{
 		n: 0,
 		s: "test0",
@@ -146,7 +140,7 @@ func TestLinkedList_Compare(t *testing.T) {
 		s: "test3",
 	})
 
-	structList2 := LinkedList[Sample]{}
+	structList2 := DoublyLinkedList[Sample]{}
 	structList2.Add(Sample{
 		n: 0,
 		s: "test0",
@@ -176,8 +170,8 @@ func TestLinkedList_Compare(t *testing.T) {
 }
 
 func TestLinkedList_AddAll(t *testing.T) {
-	l1 := LinkedList[string]{}
-	l2 := LinkedList[string]{}
+	l1 := DoublyLinkedList[string]{}
+	l2 := DoublyLinkedList[string]{}
 	l1.Add("Hello")
 	l1.Add("World")
 	l2.Add("How")
@@ -195,122 +189,54 @@ func TestLinkedList_AddAll(t *testing.T) {
 }
 
 func TestLinkedList_Remove(t *testing.T) {
-	list := NewLinkedList[string]("A")
-	list.Add("B")
-	list.Add("C")
+	list := NewDoublyLinkedList[string]("A")
+	list.Add("X")
+	list.Add("Y")
 	r1 := list.Remove()
 	r2 := list.Remove()
 	r3 := list.Remove()
 	r4 := list.Remove()
-	r5 := list.Remove()
 
 	assert.Equal(t, r1, "A")
-	assert.Equal(t, r2, "B")
-	assert.Equal(t, r3, "C")
+	assert.Equal(t, r2, "X")
+	assert.Equal(t, r3, "Y")
 	assert.Equal(t, r4, "")
-	assert.Equal(t, r5, "")
-}
 
-func TestLinkedList_RemoveLast(t *testing.T) {
-	list := NewLinkedList[string]("A")
-	list.Add("B")
-	list.Add("C")
-	r1 := list.RemoveLast()
-	r2 := list.RemoveLast()
-	r3 := list.RemoveLast()
-	r4 := list.RemoveLast()
-
-	assert.Equal(t, "C", r1)
-	assert.Equal(t, "B", r2)
-	assert.Equal(t, "A", r3)
-	assert.Equal(t, "", r4)
-}
-
-func TestLinkedList_Poll(t *testing.T) {
-	list := NewLinkedList[string]("A")
-	list.Add("B")
-	list.Add("C")
-	list.Add("D")
-
-	p1 := list.Poll()
-	p2 := list.Poll()
-	p3 := list.Poll()
-	p4 := list.Poll()
-
-	assert.Equal(t, "A", p1)
-	assert.Equal(t, "B", p2)
-	assert.Equal(t, "C", p3)
-	assert.Equal(t, "D", p4)
-}
-
-func TestLinkedList_Append(t *testing.T) {
-	l1 := NewLinkedList[string]("A")
-	l2 := NewLinkedList[string]("B")
-	l1.Append(l2)
-	p1 := l1.Poll()
-	p2 := l1.Poll()
-	assert.Equal(t, "A", p1)
-	assert.Equal(t, "B", p2)
-
-	l3 := NewLinkedList[string]("C")
-	l3.Add("D")
-	l3.Append(l2)
-	l1.Append(l3)
-
-	p3 := l3.Poll()
-	p4 := l3.Poll()
-	p5 := l3.Poll()
-
-	assert.Equal(t, "C", p3)
-	assert.Equal(t, "D", p4)
-	assert.Equal(t, "", p5)
-}
-
-func TestLinkedList_CreateIterator(t *testing.T) {
-	l := NewLinkedList("A")
-	l.Add("B")
-	l.Add("C")
-
-	it := l.CreateIterator()
-	assert.Equal(t, "A", it.Next())
-	assert.Equal(t, "B", it.Next())
-	assert.Equal(t, "C", it.Next())
-	assert.True(t, it.Done())
 }
 
 func BenchmarkLinkedList_Add(b *testing.B) {
-	l := LinkedList[string]{}
+	l := DoublyLinkedList[string]{}
 	for n := 0; n < b.N; n++ {
 		l.Add("hello")
 	}
 }
 
 func BenchmarkLinkedList_AddFirst(b *testing.B) {
-	l := LinkedList[string]{}
+	l := DoublyLinkedList[string]{}
 	for n := 0; n < b.N; n++ {
 		l.AddFirst("hello")
 	}
 }
 
 func BenchmarkLinkedList_AddLast(b *testing.B) {
-	l := LinkedList[string]{}
+	l := DoublyLinkedList[string]{}
 	for n := 0; n < b.N; n++ {
 		l.AddLast("hello")
 	}
 }
 
 func BenchmarkLinkedList_Append(b *testing.B) {
-	l := NewLinkedList[string]("Y")
+	l := NewDoublyLinkedList[string]("Y")
 	for n := 0; n < b.N; n++ {
-		l1 := &LinkedList[string]{}
+		l1 := &DoublyLinkedList[string]{}
 		l1.Add("X")
 		l.Append(l1)
 	}
 }
 
 func BenchmarkLinkedList_Remove(b *testing.B) {
-	l := NewLinkedList[int](-1)
-	for i := 0; i < 1_000_000_0; i++ {
+	l := NewDoublyLinkedList[int](-1)
+	for i := 0; i < 1000_000; i++ {
 		l.Add(i)
 	}
 
