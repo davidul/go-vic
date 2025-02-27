@@ -34,6 +34,7 @@ func NewDoublyLinkedList[T comparable](data T) *DoublyLinkedList[T] {
 	n := Node[T]{}
 	l.head = &n
 	l.tail = &n
+	l.head.data = data
 	return &l
 }
 
