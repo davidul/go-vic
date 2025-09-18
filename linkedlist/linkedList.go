@@ -30,12 +30,12 @@ func EmptyDoublyLinkedList[T comparable]() *DoublyLinkedList[T] {
 // head.next -> tail
 // head <- tail.prev
 func NewDoublyLinkedList[T comparable](data T) *DoublyLinkedList[T] {
-	l := DoublyLinkedList[T]{}
-	n := Node[T]{}
-	l.head = &n
-	l.tail = &n
-	l.head.data = data
-	return &l
+	n := &Node[T]{data: data}
+	return &DoublyLinkedList[T]{
+		head:  n,
+		tail:  n,
+		count: 1,
+	}
 }
 
 func (n *Node[T]) Next() *Node[T] {
@@ -158,15 +158,24 @@ func (L *DoublyLinkedList[T]) RemoveLast() T {
 	return data
 }
 
-// Remove node by reference to the node
+// RemoveNode Remove node by reference to the node
 func (L *DoublyLinkedList[T]) RemoveNode(node *Node[T]) {
+	if node == nil {
+		return
+	}
+
 	for e := L.head; e != nil; e = e.Next() {
 		if e == node {
 			prev := e.prev
 			next := e.next
-			prev.next = next
-			next.prev = prev
+			if prev != nil {
+				prev.next = next
+			}
+			if next != nil {
+				next.prev = prev
+			}
 			e = nil
+			L.count--
 			break
 		}
 	}
@@ -177,7 +186,7 @@ func (L *DoublyLinkedList[T]) Poll() T {
 	return L.Remove()
 }
 
-// Converts linked list to array
+// ToArray Converts linked list to array
 func (L *DoublyLinkedList[T]) ToArray() []T {
 	i := make([]T, L.count)
 	e := L.head
@@ -258,5 +267,8 @@ func (L *DoublyLinkedList[T]) AddAll(other *DoublyLinkedList[T]) {
 }
 
 func (L *DoublyLinkedList[T]) Append(other *DoublyLinkedList[T]) {
+	if other == nil || other.head == nil {
+		return
+	}
 	L.tail.next = other.head
 }

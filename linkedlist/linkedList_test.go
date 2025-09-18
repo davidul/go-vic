@@ -121,6 +121,16 @@ func TestLinkedList_RemoveNode(t *testing.T) {
 
 }
 
+func TestDoublyLinkedList_Remove_With_One_Node(t *testing.T) {
+	structList := DoublyLinkedList[Sample]{}
+	t1 := structList.Add(Sample{
+		n: 0,
+		s: "test0",
+	})
+
+	structList.RemoveNode(t1)
+}
+
 func TestLinkedList_Compare(t *testing.T) {
 	structList := DoublyLinkedList[Sample]{}
 	structList.Add(Sample{
