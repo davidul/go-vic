@@ -2,6 +2,7 @@ package bst
 
 type BinarySearchTree[T comparable] struct {
 	root *BSTNode[T]
+	size int
 }
 
 type BSTNode[T comparable] struct {
@@ -16,8 +17,7 @@ type Height struct {
 }
 
 func NewBST[T comparable]() *BinarySearchTree[T] {
-	b := new(BinarySearchTree[T])
-	return b
+	return new(BinarySearchTree[T])
 }
 
 func (B *BinarySearchTree[T]) Add(key int32, value T) {
@@ -57,8 +57,18 @@ func (B *BinarySearchTree[T]) isHeightBalanced(node *BSTNode[T], height Height) 
 
 }
 
-func (B *BinarySearchTree[T]) Traverse() {
+func (B *BinarySearchTree[T]) InOrderTraverse() []T {
+	var result []T
+	B.inorder(B.root, &result)
+	return result
+}
 
+func (b *BinarySearchTree[T]) inorder(node *BSTNode[T], result *[]T) {
+	if node != nil {
+		b.inorder(node.left, result)
+		*result = append(*result, node.value)
+		b.inorder(node.right, result)
+	}
 }
 
 func (B *BinarySearchTree[T]) find(key int32, node *BSTNode[T]) *BSTNode[T] {
@@ -94,4 +104,55 @@ func (B *BinarySearchTree[T]) insert(key int32, value T, node *BSTNode[T]) {
 		}
 
 	}
+}
+
+func (b *BinarySearchTree[T]) Delete(key int32) bool {
+	if b.root == nil {
+		return false
+	}
+
+	var found bool
+	b.root, found = b.deleteRecursive(b.root, key)
+	if found {
+		b.size--
+	}
+	return found
+}
+
+func (b *BinarySearchTree[T]) deleteRecursive(node *BSTNode[T], key int32) (*BSTNode[T], bool) {
+	if node == nil {
+		return nil, false
+	}
+
+	if key < node.key {
+		var found bool
+		node.left, found = b.deleteRecursive(node.left, key)
+		return node, found
+	} else if key > node.key {
+		var found bool
+		node.right, found = b.deleteRecursive(node.right, key)
+		return node, found
+	}
+
+	// Node to delete found
+	if node.left == nil {
+		return node.right, true
+	} else if node.right == nil {
+		return node.left, true
+	}
+
+	// Node has two children
+	minNode := b.findMin(node.right)
+	node.key = minNode.key
+	node.value = minNode.value
+	node.right, _ = b.deleteRecursive(node.right, minNode.key)
+	return node, true
+}
+
+func (b *BinarySearchTree[T]) findMin(node *BSTNode[T]) *BSTNode[T] {
+	current := node
+	for current.left != nil {
+		current = current.left
+	}
+	return current
 }
