@@ -6,30 +6,14 @@ import (
 	"time"
 )
 
-// key -> offset
-var m map[string]int = make(map[string]int)
-
-//type Item struct {
-//	key         uint8
-//	keyLength   uint8
-//	timestamp   time.Time
-//	valueLength uint32
-//	value       []byte
-//}
-
 // m map of offsets
 // offset last offset
 // memory the actual values
 type AppendOnly struct {
-	m      map[uint64]int
-	offset int
-	memory []uint8
+	m      map[uint64]int // Maps keys to their offset positions in memory
+	offset int            // Current write position in the memory buffer
+	memory []uint8        // Byte array that stores all the data
 }
-
-var offset int = 0
-
-// offsets
-var memory []uint8 = make([]uint8, 1024)
 
 func NewLog() *AppendOnly {
 	only := &AppendOnly{
@@ -41,7 +25,13 @@ func NewLog() *AppendOnly {
 	return only
 }
 
+// |key (8 bytes)|timestamp (8 bytes)|valueLength (4 bytes)|value (variable)|
+// Key: 8-byte unique identifier (uint64)
+// Timestamp: 8-byte Unix timestamp in nanoseconds
+// Value Length: 4-byte integer indicating how many bytes the value occupies
+// Value: Variable-length byte array containing the actual data
 func (A *AppendOnly) Add(key uint64, v []byte) uint64 {
+	// key must be unique, if it already exists, generate a new one
 	if _, ok := A.m[key]; ok {
 		key = A.GenerateKey()
 	}
@@ -62,12 +52,12 @@ func (A *AppendOnly) Add(key uint64, v []byte) uint64 {
 
 // |key|timestamp|valueLength|value|
 func (A *AppendOnly) Get(key uint64) []uint8 {
-	end := A.m[key]
-	end += 8
+	start := A.m[key]
+	end := start + 8
 	//key
-	k := binary.BigEndian.Uint64(A.memory[:end])
+	k := binary.BigEndian.Uint64(A.memory[start:end])
 	fmt.Println(k)
-	start := end
+	start = end
 	end += 8
 	//timestamp
 	ts := binary.BigEndian.Uint64(A.memory[start:end])
