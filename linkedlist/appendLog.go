@@ -2,7 +2,7 @@ package linkedlist
 
 import (
 	"encoding/binary"
-	"fmt"
+	"sync"
 	"time"
 )
 
@@ -10,6 +10,7 @@ import (
 // offset last offset
 // memory the actual values
 type AppendOnly struct {
+	mu     sync.RWMutex   // Protects concurrent access to m, offset, and memory
 	m      map[uint64]int // Maps keys to their offset positions in memory
 	offset int            // Current write position in the memory buffer
 	memory []uint8        // Byte array that stores all the data
@@ -31,6 +32,9 @@ func NewLog() *AppendOnly {
 // Value Length: 4-byte integer indicating how many bytes the value occupies
 // Value: Variable-length byte array containing the actual data
 func (A *AppendOnly) Add(key uint64, v []byte) uint64 {
+	A.mu.Lock()
+	defer A.mu.Unlock()
+
 	// key must be unique, if it already exists, generate a new one
 	if _, ok := A.m[key]; ok {
 		key = A.GenerateKey()
@@ -52,16 +56,17 @@ func (A *AppendOnly) Add(key uint64, v []byte) uint64 {
 
 // |key|timestamp|valueLength|value|
 func (A *AppendOnly) Get(key uint64) []uint8 {
+	A.mu.RLock()
+	defer A.mu.RUnlock()
+
 	start := A.m[key]
 	end := start + 8
 	//key
-	k := binary.BigEndian.Uint64(A.memory[start:end])
-	fmt.Println(k)
+	//k := binary.BigEndian.Uint64(A.memory[start:end])
 	start = end
 	end += 8
 	//timestamp
-	ts := binary.BigEndian.Uint64(A.memory[start:end])
-	fmt.Println(ts)
+	//ts := binary.BigEndian.Uint64(A.memory[start:end])
 	start = end
 	end += 4
 	//value length
@@ -74,10 +79,16 @@ func (A *AppendOnly) Get(key uint64) []uint8 {
 }
 
 func (A *AppendOnly) GetOffset(key uint64) int {
+	A.mu.RLock()
+	defer A.mu.RUnlock()
+
 	return A.m[key]
 }
 
 func (A *AppendOnly) GetMemory() []uint8 {
+	A.mu.RLock()
+	defer A.mu.RUnlock()
+
 	return A.memory
 }
 
