@@ -272,3 +272,21 @@ func (L *DoublyLinkedList[T]) Append(other *DoublyLinkedList[T]) {
 	}
 	L.tail.next = other.head
 }
+
+func (L *DoublyLinkedList[T]) MoveToFront(data T) {
+	if L.head == nil {
+		return
+	}
+
+	n := L.head
+	for e := n.next; e != nil; e = e.Next() {
+
+	}
+	if n.data == data {
+		L.RemoveNode(n)
+		L.AddFirst(data)
+	} else {
+		n = n.next
+	}
+
+}
